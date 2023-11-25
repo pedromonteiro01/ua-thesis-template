@@ -23,7 +23,7 @@
 
 % Enable for for Overleaf support
 \usepackage{ifthen}
-\def\useoverleaf{0}  % change to non-zero (for instance, 1) to enable it
+\def\useoverleaf{1}  % change to non-zero (for instance, 1) to enable it
 
 \makeatletter
 \newcommand{\makecoverfile}[0]{%
@@ -43,7 +43,7 @@
 % For English and Portuguese languages
 % Portuguese will be the default.
 % Uncomment \setlanguage below to change it
-\usepackage[english,portuguese]{babel}
+\usepackage[english]{babel}
 
 % Uncomment to use a custom date format
 %\usepackage{datetime}
@@ -235,10 +235,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
-
-% Fix the numbering scheme by having a ghost style for page numbering
-\pagenumbering{Alph}
-
 \ifthenelse{\equal{\useoverleaf}{0}}{}{\makecoverfile{}}%
 \includepdf[pages=-]{cover.pdf}
 
@@ -367,7 +363,7 @@
 
 % Uncomment to add further chapters
 \include{chapters/chapter1}
-%\include{chapter2}
+\include{chapters/chapter2}
 %\include{chapter3}
 %\include{chapter4}
 
@@ -401,6 +397,8 @@
 \mainmatterWithoutReset
 \appendix
 
-\include{chapters/appendix-more}
+% \include{appendix-a}
+% \include{appendix-b}
+% \include{appendix-c}
 
 \end{document}
