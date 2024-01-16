@@ -11,7 +11,7 @@
 \section{Context and Motivation}
 Recent years have seen an alarming rise in firearm-related crimes. The Federal Bureau of Investigation reported 50 active shooter incidents in the United States in 2022, spread across 25 states. These incidents resulted in 313 casualties, Figure \ref{fig:casualties}, including 100 deaths and 213 injuries, with the most severe incident causing seven fatalities and 48 injuries \selectlanguage{english}\cite{rfc37}.
 
-Notably, there was an 18\% decrease in such incidents from 2021 but a significant 66.7\% increase compared to 2018, as shown in Figure \ref{fig:incidents}.
+Notably, there was a 18\% decrease in such incidents in 2021 but a significant 66.7\% increase compared to 2018, as shown in Figure \ref{fig:incidents}.
 
 \begin{figure}[h]
     \centering
@@ -29,33 +29,54 @@ Notably, there was an 18\% decrease in such incidents from 2021 but a significan
     \end{minipage}
 \end{figure}
 
-Despite strict gun laws in many countries, firearm access remains relatively easy \selectlanguage{english}\cite{rfc39} \selectlanguage{english}\cite{rfc40}. The United States leads globally in civilian gun ownership, with 120.5 firearms per 100 people, almost twice as high as the country with the second-highest rate \selectlanguage{english}\cite{rfc32}.
+Despite strict gun laws in many countries, firearm access remains relatively easy \selectlanguage{english}\cite{rfc39, rfc40}. The United States leads globally in civilian gun ownership, with 120.5 firearms per 100 people, almost twice as high as the country with the second-highest rate \selectlanguage{english}\cite{rfc32}.
 
-Within the 50 active shooter incidents in 2022, a total of 61 firearms were utilized, Figure \ref{fig:fbi-firearms}. Handguns were the most frequently used, accounting for 29 of the weapons, followed closely by rifles at 26.
+Within the 50 active shooter incidents in 2022, a total of 61 firearms were utilized, as shown in Figure \ref{fig:fbi-firearms}. Handguns were the most frequently used, accounting for 29 of the weapons, followed closely by rifles at 26.
 
 \begin{figure}[h]
     \centering 
-    \includegraphics[width=0.5\textwidth]{figs/firearms.png} 
+    \includegraphics[width=0.4\textwidth]{figs/firearms.png} 
     \caption{Firearm used by active shooters in the United States \selectlanguage{english}\cite{rfc37}}
     \label{fig:fbi-firearms}
 \end{figure}
 
-The use of Closed-Circuit Television (CCTV) systems has become increasingly crucial in the realm of crime prevention. Research indicates a notable correlation between CCTV deployment and a reduction in crime rates, particularly in car parks \selectlanguage{english}\cite{rfc33}. For example, in Florida, the implementation of CCTV has resulted in crime rate reductions of up to 51\% in certain areas \selectlanguage{english}\cite{rfc34}. Alongside its growing popularity worldwide, CCTV surveillance has generated debates concerning its effectiveness, efficiency, and related privacy issues. Critics of CCTV surveillance frequently raise concerns about the invasion of privacy and the risk of violating privacy laws \selectlanguage{english}\cite{rfc38}.
+Shifting focus to Portugal, as reported in the RASI \selectlanguage{english}\cite{rfc41}, there has been a notable increase in criminal activity. The total number of general crime reports registered by the Public Security Forces was 343,845 in 2022, which is an increase of 42,451 compared to 2021, representing a 14.1\% rise. Specifically, the total number of reported violent and serious crimes was 13,281, up by 1,667 from the previous year, marking a 14.4\% increase, Figure \ref{fig:crimes-portugal}.
 
-A significant challenge in operating CCTV systems is the reliance on human monitoring, which is susceptible to errors due to fatigue or distraction. Additionally, the financial implications of CCTV, including the costs associated with constructing and maintaining these surveillance systems, form an essential part of the discussion. These costs must be weighed against the potential benefits in crime reduction and public safety \selectlanguage{english}\cite{rfc38}. 
+\begin{figure}[h]
+    \centering 
+    \includegraphics[width=0.8\textwidth]{figs/crimes-portugal.png} 
+    \caption{Crime Rates in Portugal from 2014 to 2022 \selectlanguage{english}\cite{rfc41}}
+    \label{fig:crimes-portugal}
+\end{figure}
 
-The effectiveness of CCTV in controlling crime varies and is influenced by several factors, including geographic location, crime types, and the strategies employed for camera monitoring. Studies have revealed that CCTV operations managed by private security personnel tend to have a more substantial crime prevention impact compared to those overseen by police \selectlanguage{english}\cite{rfc36}. In Sweden's deprived neighborhoods, the use of CCTV has led to a decrease in violent crimes, though it has not significantly affected property crime rates or the clearance of crimes \selectlanguage{english}\cite{rfc35}.
+Figure \ref{fig:geo-crimes} shows a geographically decrease in the districts of Braga (-5.1\%), Bragança (-17.9\%), and Vila Real (-10\%). Conversely, there was a significant increase in Lisbon (11.4\%), Porto (+11.3\%), Faro (23.9\%), and the Autonomous Region of Madeira (+52\%).
 
-CCTV systems have emerged as key tools in crime prevention, offering the ability to reduce specific types of crime, especially in environments where they are actively monitored and used alongside other interventions \selectlanguage{english}\cite{rfc35}. 
+\begin{figure}[h]
+    \centering 
+    \includegraphics[width=0.75\textwidth]{figs/geo-crimes-rate.png} 
+    \caption{Geographical Distribution of Crime Rate Increase in Portugal by District in 2022 \selectlanguage{english}\cite{rfc41}}
+    \label{fig:geo-crimes}
+\end{figure}
+
+The use of \ac{cctv} systems has become increasingly crucial in the realm of crime prevention. Research indicates a notable correlation between \ac{cctv} deployment and a reduction in crime rates, particularly in car parks \selectlanguage{english}\cite{rfc33}. For example, in Florida, the implementation of \ac{cctv} has resulted in crime rate reductions of up to 51\% in certain areas \selectlanguage{english}\cite{rfc34}. Alongside its growing popularity worldwide, \ac{cctv} surveillance has generated debates concerning its effectiveness, efficiency, and related privacy issues. Critics of \ac{cctv} surveillance frequently raise concerns about the invasion of privacy and the risk of violating privacy laws \selectlanguage{english}\cite{rfc38}.
+
+A significant challenge in operating \ac{cctv} systems is the reliance on human monitoring, which is susceptible to errors due to fatigue or distraction. Additionally, the financial implications of \ac{cctv}, including the costs associated with constructing and maintaining these surveillance systems, form an essential part of the discussion. These costs must be weighed against the potential benefits in crime reduction and public safety \selectlanguage{english}\cite{rfc38}. 
+
+The effectiveness of \ac{cctv} in controlling crime varies and is influenced by several factors, including geographic location, crime types, and the strategies employed for camera monitoring. Studies have revealed that \ac{cctv} operations managed by private security personnel tend to have a more substantial crime prevention impact compared to those overseen by police \selectlanguage{english}\cite{rfc36}. In Sweden's deprived neighborhoods, the use of \ac{cctv} has led to a decrease in violent crimes, though it has not significantly affected property crime rates or the clearance of crimes \selectlanguage{english}\cite{rfc35}.
+
+\ac{cctv} systems have emerged as key tools in crime prevention, offering the ability to reduce specific types of crime, especially in environments where they are actively monitored and used alongside other interventions \selectlanguage{english}\cite{rfc35}. 
 \section{Objectives}
-The primary goal of this project is to advance the field of public safety and security through the development of a Deep Learning-Based system for real-time weapon detection in CCTV surveillance footage, designed for the detection and classification of weapons, such as firearms and bladed. This includes several key aspects:
+The primary goal of this project is to advance the field of public safety and security through the development of a Deep Learning-Based system for real-time weapon detection in \ac{cctv} surveillance footage, designed for the detection and classification of weapons, such as firearms and bladed. This includes several key aspects:
 \begin{itemize}
     \item Exploration of Current Technologies and Methods: thorough review of the state-of-the-art technologies and methodologies used in real-time, analyzing existing approaches' effectiveness, efficiency, and applicability in various real-world scenarios;
     \item Identification and Analysis of Public Databases: identify public databases that contain relevant data on anomalous objects;
     \item Development of a Deep Learning Model: develop a state-of-the-art deep learning model capable of accurately identifying and classifying firearms or bladed weapons in diverse and challenging surveillance scenarios;
-    \item Prototype Solution Proposal: design a prototype solution that integrates the developed deep learning model into a practical, user-friendly system for real-time surveillance;
+    \item Architecture Design and Prototyping: proposing and developing a prototype solution with a well-defined architecture;
     \item Performance Evaluation and Limitation Analysis: extensive testing of the prototype in various real-life scenarios to evaluate its performance, accuracy, and reliability;
 \end{itemize}
 
 The expectation is that the application and model developed through this research will surpass existing solutions in terms of efficiency, accuracy, and practicality. To achieve this, it is imperative to conduct a meticulous and comprehensive analysis of the work done by other researchers in the same field. This examination will not only provide insights into the most effective strategies and methodologies but will also shed light on the common challenges and barriers encountered in similar attempts.  
 \section{Outline of the Document}
+The document is organized into subsequent chapters as follows: Chapter 2 offers a detailed analysis of the existing research and technologies in weapon detection, focusing on critical aspects like weapon categorization, the significance of \ac{cctv}, and the application of deep learning algorithms. 
+
+Chapter 3 discusses the high-level architecture of the project and details the work plan, including milestones and a Gantt chart to illustrate the project timeline.
