@@ -167,7 +167,15 @@ The design of the cameras significantly influences their ability to prevent crim
 
 \selectlanguage{english}\citet{rfc42} identified a spectrum of problems in control room environments, specifically in the management and operation of \ac{cctv} systems. A critical aspect highlighted is the poor configuration of technology in these environments. This includes improperly positioned cameras in low-crime zones or areas with blind spots, and the adverse effects of weather on analog signals. Additionally, outdated or malfunctioning equipment, like broken camera controllers, further impairs surveillance effectiveness. The quality of video recordings was another area of significant concern. Many control rooms recorded footage at low resolutions, rendering it ineffective for detailed analyses or criminal investigations.
 
-\cite{rfc46} proposed a model which delineates a community's surveillance blueprint, marking the prime locations for \ac{cctv} installation. Red dots are designated for the main entry and exit points of the area, ensuring vigilant monitoring of all individuals passing through these thresholds. Black dots indicate street intersections and corners, key spots that allow for expansive surveillance coverage. In this model, cameras positioned at red dots would be pivotal for controlling access points, while those at black dots would enable panoramic monitoring of the area, essential for observing multiple streets and deterring potential criminal activity. 
+\citet{rfc46} proposed a model which delineates a community's surveillance blueprint, marking the prime locations for \ac{cctv} installation. 
+\begin{itemize}
+    \item Red dots represent primary entry and exit points, ensuring close monitoring of individual movements through these areas;
+    \item Black dots are placed at street intersections and corners, providing broad surveillance coverage;
+\end{itemize}
+
+In this model, cameras positioned at red dots 
+would be pivotal for controlling access points, while those at black dots would enable panoramic monitoring 
+of the area, essential for observing multiple streets and deterring potential criminal activity. 
 
 \begin{figure}[h]
     \centering 
@@ -176,73 +184,6 @@ The design of the cameras significantly influences their ability to prevent crim
     \label{fig:cctv-positions}
 \end{figure}
 
-\subsection{Comparative Analysis of Weapon Detection Technologies}
-\selectlanguage{english}\citet{rfc3} point out the concern of incidents involving firearms and knives due to insufficient security checks. Despite \ac{cctv}s have become prevalent, their constant surveillance demands often surpass human monitoring capabilities. The paper introduces an automated weapon detection system, which employs the \ac{yolo}v5 deep learning model, adapted to a carefully selected dataset. The obtained results achieved a F1 score of 0.95 when applied to \ac{cctv} footage.
-
-\selectlanguage{english}\citet{rfc4} emphasize the importance of security for economic growth and attracting investors and tourists. The study addresses the difficulty of detecting weapons in real-time, considering problems like different angles, blocked views, and hidden weapons. A dataset was adapted by the researchers from diverse sources, including original photos, online repositories, and even film databases. Their exploration spanned several algorithms, like VGG16, Inception variants, and \ac{yolo} iterations. Through rigorous testing prioritizing precision and recall over mere accuracy, \ac{yolo}v4 emerged as the frontrunner, achieving a F1-score of 0.91 and a mean average precision of 0.92. To illustrate the methodology behind the advanced surveillance techniques discussed, Figure \ref{fig:bhatti-chart} provides a schematic overview of the relationship between object recognition, including classification and localization, and object detection.
-
-\begin{figure}[ht]
-    \centering 
-    \includegraphics[width=0.43\textwidth]{figs/bhatti-chart.png} 
-    \caption{Object recognition to detection hierarchy \cite{rfc4}}
-    \label{fig:bhatti-chart}
-\end{figure}
-
-In their study, \selectlanguage{english}\citet{rfc5}, address the challenge of detecting concealed weapons in public spaces, despite widespread \ac{cctv} surveillance. They point out the limitations of human monitoring in effectively analyzing extensive footage. To overcome this, they develop an enhanced weapon detection system using the \ac{yolo}v5 deep learning framework, specifically trained on a dataset of 1496 images. This system excels in identifying handguns in various conditions, achieving a \ac{map} of 0.92. Additionally, their comparative analysis with \ac{yolo}v3, as shown in Figure \ref{fig:performance-Thangaraj}, indicates that \ac{yolo}v5 not only improves accuracy in handgun detection but also operates faster and with lower computational demands.
-
-\begin{figure}[h]
-    \centering 
-    \includegraphics[width=0.55\textwidth]{figs/performance-Thangaraj.png} 
-    \caption{Models Performance Comparison \selectlanguage{english}\cite{rfc5}}
-    \label{fig:performance-Thangaraj}
-\end{figure}
-
-\selectlanguage{english}\citet{rfc18} refers in smart cities context the need for a advanced surveillance applied to urban security. The authors present an approach, combining super-resolution techniques with the \ac{yolo}v4 deep neural network, to detect knives in complex images, a task made difficult by variables like shape, size, and lighting.
-
-\selectlanguage{english}\citet{rfc17}, address the challenge of escalating urban crimes involving firearms and sharp objects in their study. They note the inadequacy of manual monitoring of the extensive data generated by omnipresent \ac{cctv}s in modern cities. To bridge this gap, they have innovated using the \ac{yolo}v8 deep learning framework, tailored to a specialized dataset including images of pistols, knives, and screwdrivers. The system achieved 0.93 accuracy rate on \ac{cctv} footage.
-
-In the security system presented by \citet{rfc19}, a key component of the image processing workflow involves the pre-processing of \ac{cctv} feed images to enhance the performance of the deep learning model, Figure \ref{fig:al-mousa-flow}. The system operates by periodically capturing images from \ac{cctv} feeds and analyzing them with a \ac{cnn}, enabling swift identification of potential threats. A distinctive feature of this system is the immediate notification of security personnel via a mobile app, including an image of the detected threat. The system achieves an accuracy rate of 0.92 and can detect threats within 1.6 seconds.
-
-\begin{figure}[h]
-    \centering 
-    \includegraphics[width=0.55\textwidth]{figs/al-mousa-flowchart.png} 
-    \caption{\selectlanguage{english}\citet{rfc19} image pre-processing flowchart}
-    \label{fig:al-mousa-flow}
-\end{figure}
-
-\selectlanguage{english}\citet{rfc6} research tackles the increasingly alarming scenario of weapon-related threats in crowded public spaces like banks, airports, and railway stations. Recognizing that while the deployment of \ac{cctv} cameras has seen a global surge, the sheer volume of footage can overwhelm human operators. This paper introduces a weapon detection system that uses the power of deep learning, specifically through the use of \ac{cnn}. Trained on a dataset of 10014 images, the model adeptly identifies knives, small guns, and long guns, achieving an accuracy rate of approximately 0.85.
-
-\selectlanguage{english}\citet{rfc20} address the limitations of \ac{cctv} systems, particularly their dependence on manual monitoring by police personnel, by introducing an automated weapon detection system, Figure \ref{fig:hnoohom-system}. Utilizing two public datasets, ARMAS and IMFDB \cite{rfc28}, their research tests various object detection techniques, including \ac{ssd} MobileNet-V1, EfficientDet-D0, and \ac{frcnn} Inception Resnet-V2. The study highlights the effectiveness of \ac{frcnn} Inception V2 with the ARMAS dataset, achieving a \ac{map} of 0.540, and \ac{ap} scores of 0.793 at 0.5 \ac{iou} and 0.627 at 0.75 IoU.
-\begin{figure}[h]
-    \centering 
-    \includegraphics[width=0.4\textwidth]{figs/hnoohom-system.png} 
-    \caption{\selectlanguage{english}\citet{rfc20} weapon detection process}
-    \label{fig:hnoohom-system}
-\end{figure}
-
-\selectlanguage{english}\citet{rfc7} emphasize the alarming rise in criminal activities in urban spaces, despite the ubiquity of \ac{cctv} systems in public areas. Recognizing the limitations of human supervision for these vast surveillance networks, they introduce an intelligent crime detection mechanism. Utilizing the \ac{ssd} Mobilenet architecture fine-tuned on the DaSCI Weapon Dataset \cite{rfc29}, their solution identifies a broad spectrum of weapons, yielding an accuracy rate of 0.81. Moreover, with the integration of the GRU-based behavior analysis model, the system achieved an accuracy of 0.96 in detecting suspicious actions.
-
-Table \ref{models-results} provides a comparative summary of the weapon detection models used by the authors. \ac{yolo} models, particularly \ac{yolo}v5, demonstrate high performance with an F1 score up to 0.95, indicating strong precision and recall. The table also shows that while traditional \ac{cnn} models are effective, with accuracy scores around 0.92, are generally outperformed by the \ac{yolo} series. \ac{frcnn} and \ac{ssd} models show varied results with accuracies ranging from 0.81 to 0.85 and mAP scores as low as 0.54, suggesting they may be less consistent across different datasets. Overall, newer \ac{yolo} models seem to offer a good balance of accuracy and efficiency for object detection tasks.
-
-\begin{table}[ht]
-    \centering
-    \begin{tabular}{|l|l|l|}
-    \hline
-    \textbf{Authors} & \textbf{Model} & \textbf{Results} \\ \hline
-    \selectlanguage{english}\citet{rfc3} & Yolov5 & F1 Score 0.95 \\ \hline
-    \selectlanguage{english}\citet{rfc4} & Yolov4 & F1 Score 0.91, mAP 0.92 \\ \hline
-    \selectlanguage{english}\citet{rfc5} & Yolov3, Yolov5 & mAP 0.92 \\ \hline
-    \selectlanguage{english}\citet{rfc18} & Yolov4 & - \\ \hline
-    \selectlanguage{english}\citet{rfc17} & Yolov8 & Accuracy 0.93 \\ \hline
-    \selectlanguage{english}\citet{rfc19} & CNN & Accuracy 0.92 \\ \hline
-    \selectlanguage{english}\citet{rfc6} & CNN & Accuracy 0.85 \\ \hline
-    \selectlanguage{english}\citet{rfc20} & Faster R-CNN & mAP 0.54, AP 0.793  \\ \hline
-    \selectlanguage{english}\citet{rfc7} & SSD & Accuracy 0.81 \\
-    \hline
-    \end{tabular}
-    \caption{Authors models and results}
-    \label{models-results}
-\end{table}
 
 \subsection{Analysis of Existing Datasets in Weapon Detection Research}
 In real-time weapon detection, using datasets that mimic real-world situations is crucial.
@@ -305,4 +246,96 @@ The \citet{rfc7} system initiates surveillance and processes the input from two 
     \includegraphics[width=0.6\textwidth]{figs/shenoy-architecture.png} 
     \caption{\citet{rfc7} System Architecture}
     \label{fig:shenoy-architecture}
+\end{figure}
+
+\subsection{Comparative Analysis of Weapon Detection Technologies}
+\selectlanguage{english}\citet{rfc3} point out the concern of incidents involving firearms and knives due to insufficient security checks. Despite \ac{cctv}s have become prevalent, their constant surveillance demands often surpass human monitoring capabilities. The paper introduces an automated weapon detection system, which employs the \ac{yolo}v5 deep learning model, adapted to a carefully selected dataset. The obtained results achieved a F1 score of 0.95 when applied to \ac{cctv} footage.
+
+\selectlanguage{english}\citet{rfc4} emphasize the importance of security for economic growth and attracting investors and tourists. The study addresses the difficulty of detecting weapons in real-time, considering problems like different angles, blocked views, and hidden weapons. A dataset was adapted by the researchers from diverse sources, including original photos, online repositories, and even film databases. Their exploration spanned several algorithms, like VGG16, Inception variants, and \ac{yolo} iterations. Through rigorous testing prioritizing precision and recall over mere accuracy, \ac{yolo}v4 emerged as the frontrunner, achieving a F1-score of 0.91 and a mean average precision of 0.92. To illustrate the methodology behind the advanced surveillance techniques discussed, Figure \ref{fig:bhatti-chart} provides a schematic overview of the relationship between object recognition, including classification and localization, and object detection.
+
+\begin{figure}[ht]
+    \centering 
+    \includegraphics[width=0.43\textwidth]{figs/bhatti-chart.png} 
+    \caption{Object recognition to detection hierarchy \cite{rfc4}}
+    \label{fig:bhatti-chart}
+\end{figure}
+
+In their study, \selectlanguage{english}\citet{rfc5}, address the challenge of detecting concealed weapons in public spaces, despite widespread \ac{cctv} surveillance. They point out the limitations of human monitoring in effectively analyzing extensive footage. To overcome this, they develop an enhanced weapon detection system using the \ac{yolo}v5 deep learning framework, specifically trained on a dataset of 1496 images. This system excels in identifying handguns in various conditions, achieving a \ac{map} of 0.92. Additionally, their comparative analysis with \ac{yolo}v3, as shown in Figure \ref{fig:performance-Thangaraj}, indicates that \ac{yolo}v5 not only improves accuracy in handgun detection but also operates faster and with lower computational demands.
+
+\begin{figure}[h]
+    \centering 
+    \includegraphics[width=0.55\textwidth]{figs/performance-Thangaraj.png} 
+    \caption{Models Performance Comparison \selectlanguage{english}\cite{rfc5}}
+    \label{fig:performance-Thangaraj}
+\end{figure}
+
+\selectlanguage{english}\citet{rfc18} refers in smart cities context the need for a advanced surveillance applied to urban security. The authors present an approach, combining super-resolution techniques with the \ac{yolo}v4 deep neural network, to detect knives in complex images, a task made difficult by variables like shape, size, and lighting.
+
+\selectlanguage{english}\citet{rfc17}, address the challenge of escalating urban crimes involving firearms and sharp objects in their study. They note the inadequacy of manual monitoring of the extensive data generated by omnipresent \ac{cctv}s in modern cities. To bridge this gap, they have innovated using the \ac{yolo}v8 deep learning framework, tailored to a specialized dataset including images of pistols, knives, and screwdrivers. The system achieved 0.93 accuracy rate on \ac{cctv} footage.
+
+In the security system presented by \citet{rfc19}, a key component of the image processing workflow involves the pre-processing of \ac{cctv} feed images to enhance the performance of the deep learning model, Figure \ref{fig:al-mousa-flow}. The system operates by periodically capturing images from \ac{cctv} feeds and analyzing them with a \ac{cnn}, enabling swift identification of potential threats. A distinctive feature of this system is the immediate notification of security personnel via a mobile app, including an image of the detected threat. The system achieves an accuracy rate of 0.92 and can detect threats within 1.6 seconds.
+
+\begin{figure}[h]
+    \centering 
+    \includegraphics[width=0.65\textwidth]{figs/al-mousa-flowchart.png} 
+    \caption{\selectlanguage{english}\citet{rfc19} image pre-processing flowchart}
+    \label{fig:al-mousa-flow}
+\end{figure}
+
+\selectlanguage{english}\citet{rfc6} research tackles the increasingly alarming scenario of weapon-related threats in crowded public spaces like banks, airports, and railway stations. Recognizing that while the deployment of \ac{cctv} cameras has seen a global surge, the sheer volume of footage can overwhelm human operators. This paper introduces a weapon detection system that uses the power of deep learning, specifically through the use of \ac{cnn}. Trained on a dataset of 10014 images, the model adeptly identifies knives, small guns, and long guns, achieving an accuracy rate of approximately 0.85.
+
+\selectlanguage{english}\citet{rfc20} address the limitations of \ac{cctv} systems, particularly their dependence on manual monitoring by police personnel, by introducing an automated weapon detection system, Figure \ref{fig:hnoohom-system}. Utilizing two public datasets, ARMAS and IMFDB \cite{rfc28}, their research tests various object detection techniques, including \ac{ssd} MobileNet-V1, EfficientDet-D0, and \ac{frcnn} Inception Resnet-V2. The study highlights the effectiveness of \ac{frcnn} Inception V2 with the ARMAS dataset, achieving a \ac{map} of 0.540, and \ac{ap} scores of 0.793 at 0.5 \ac{iou} and 0.627 at 0.75 IoU.
+\begin{figure}[h]
+    \centering 
+    \includegraphics[width=0.37\textwidth]{figs/hnoohom-system.png} 
+    \caption{\selectlanguage{english}\citet{rfc20} weapon detection process}
+    \label{fig:hnoohom-system}
+\end{figure}
+
+\selectlanguage{english}\citet{rfc7} emphasize the alarming rise in criminal activities in urban spaces, despite the ubiquity of \ac{cctv} systems in public areas. Recognizing the limitations of human supervision for these vast surveillance networks, they introduce an intelligent crime detection mechanism. Utilizing the \ac{ssd} Mobilenet architecture fine-tuned on the DaSCI Weapon Dataset \cite{rfc29}, their solution identifies a broad spectrum of weapons, yielding an accuracy rate of 0.81. Moreover, with the integration of the GRU-based behavior analysis model, the system achieved an accuracy of 0.96 in detecting suspicious actions.
+
+Table \ref{models-results} provides a comparative summary of the weapon detection models used by the authors. \ac{yolo} models, particularly \ac{yolo}v5, demonstrate high performance with an F1 score up to 0.95, indicating strong precision and recall. The table also shows that while traditional \ac{cnn} models are effective, with accuracy scores around 0.92, are generally outperformed by the \ac{yolo} series. \ac{frcnn} and \ac{ssd} models show varied results with accuracies ranging from 0.81 to 0.85 and mAP scores as low as 0.54, suggesting they may be less consistent across different datasets. Overall, newer \ac{yolo} models seem to offer a good balance of accuracy and efficiency for object detection tasks.
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{|l|l|l|}
+    \hline
+    \textbf{Authors} & \textbf{Model} & \textbf{Results} \\ \hline
+    \selectlanguage{english}\citet{rfc3} & Yolov5 & F1 Score 0.95 \\ \hline
+    \selectlanguage{english}\citet{rfc4} & Yolov4 & F1 Score 0.91, mAP 0.92 \\ \hline
+    \selectlanguage{english}\citet{rfc5} & Yolov3, Yolov5 & mAP 0.92 \\ \hline
+    \selectlanguage{english}\citet{rfc18} & Yolov4 & - \\ \hline
+    \selectlanguage{english}\citet{rfc17} & Yolov8 & Accuracy 0.93 \\ \hline
+    \selectlanguage{english}\citet{rfc19} & CNN & Accuracy 0.92 \\ \hline
+    \selectlanguage{english}\citet{rfc6} & CNN & Accuracy 0.85 \\ \hline
+    \selectlanguage{english}\citet{rfc20} & Faster R-CNN & mAP 0.54, AP 0.79 (0.5 IoU), AP 0.63 (0.75 IoU)  \\ \hline
+    \selectlanguage{english}\citet{rfc7} & SSD & Accuracy 0.81 \\
+    \hline
+    \end{tabular}
+    \caption{Authors models and results}
+    \label{models-results}
+\end{table}
+
+Figure \ref{fig:models-distribution} presents the distribution of different models utilized in previous weapon detection studies, with YOLO models being the predominant choice at 55.6\%, featured in over half of the articles. 
+
+Meanwhile, Figure \ref{fig:metrics-distribution} displays the evaluation metrics that researchers selected for assessing weapon detection models. The Accuracy Rate is the leading metric, employed in 41.7\% of the studies, followed by the F1 Score, which is used in 33.3\% of the cases. The Mean Average Precision (mAP) and Intersection over Union (IoU) metrics are less commonly used, at 16.7\% and 8.3\% respectively.
+\begin{figure}[h]
+    \centering
+
+    % Image 1
+    \begin{minipage}{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/models-distribution.png} % Include the image
+        \caption{Distribution of models used in studies}
+        \label{fig:models-distribution}
+    \end{minipage}
+    \hfill
+    % Image 2
+    \begin{minipage}{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/metrics-distribution.png} % Include the image
+        \caption{Distribution of metrics used in studies}
+        \label{fig:metrics-distribution}
+    \end{minipage}
+
 \end{figure}

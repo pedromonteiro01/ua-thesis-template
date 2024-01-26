@@ -38,6 +38,8 @@ The cameras, strategically placed in two different corridors and one entrance, p
 
 Additionally, the dataset incorporates a selection of more general images of exposed weapons from the DaSCI collection \cite{rfc29}. This inclusion broadens the scope of the dataset, providing a more comprehensive view of weapon imagery. It also includes images that diverge from the theme of weapons and knives, featuring everyday objects such as wallets or bicycles.
 
+In the process of creating this dataset, it was necessary to convert annotations from .xml files to .txt format to ensure compatibility with the YOLOv5 format.
+
 In total, the dataset comprises 11020 images. A strategic division of these images allocates 80\% for training purposes. This portion is crucial for the development and refinement of the object detection model, allowing for extensive learning and adaptation based on a wide array of visual inputs. The remaining 20\% of the images are used for testing. 
 
 Table \ref{datasets-table} presents a dataset summary, listing the source, number of images, resolution, format, and a brief description.
@@ -100,6 +102,17 @@ The generated YOLOv5 was then utilized to train and test on the dataset created 
         \label{fig:f1-score}
 \end{figure}
 
+Figure \ref{fig:cam1-frame} exhibits an output from the Cam1 footage, processed using the fine-tuned YOLOv5 model, captured from the Mock Attack Dataset \cite{rfc45}.
+
+The model has annotated three objects with bounding boxes, identifying them as potential weapons with varying degrees of confidence: one at 0.61, and two others at 0.65 and 0.75, and a knife at a confidence of 0.55. 
+
+\begin{figure}[h]
+    \centering 
+    \includegraphics[width=0.6\textwidth]{figs/cam1-frame.png} % Include the image
+        \caption{Model-generated Cam1 frame showing weapon detection with confidence scores}
+        \label{fig:cam1-frame}
+\end{figure}
+
 \section{Work Plan and Milestones}
 The thesis's work plan is presented in the Gantt chart (Figure \ref{fig:gantt}), which maps out the timeline for each task to the development process. This chart illustrates a strategic methodology, guaranteeing a methodical and efficient advancement of the project. 
 
@@ -107,9 +120,9 @@ The efficiency of the project results from the implementation of a bottom-up\foo
 
 In parallel, the thesis writing progresses in an iterative manner alongside the development tasks. This simultaneous documentation approach ensures the continuous incorporation of new insights and findings into the thesis. This strategy not only enriches the content but also guarantees that the documentation aligns with the ongoing development.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.9\textheight, height=0.6\textwidth, keepaspectratio, angle=90]{figs/gantt.png}
-    \caption{Gantt Chart Timeline for Project Management and Development Stages}
-    \label{fig:gantt}
+\begin{figure}[ht]
+    \centering 
+    \includegraphics[width=\textwidth]{figs/gantt.png} % Include the image
+        \caption{Gantt chart timeline for project management and development stages}
+        \label{fig:gantt-chart}
 \end{figure}
