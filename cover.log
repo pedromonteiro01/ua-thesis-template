@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2023.11.24)  15 JAN 2024 12:17
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.4.29)  29 APR 2024 12:36
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -116,7 +116,7 @@ LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
 Package: babel 2022/01/26 3.70 The Babel package
 \babel@savecnt=\count197
 \U@D=\dimen141
-\l@unhyphenated=\language87
+\l@unhyphenated=\language10
 
 (/usr/share/texlive/texmf-dist/tex/generic/babel/txtbabel.def)
 \bbl@readstream=\read2
@@ -127,9 +127,9 @@ Language: english 2017/06/06 v3.3r English support from the babel system
 Package babel Info: Hyphen rules for 'canadian' set to \l@english
 (babel)             (\language0). Reported on input line 102.
 Package babel Info: Hyphen rules for 'australian' set to \l@ukenglish
-(babel)             (\language11). Reported on input line 105.
+(babel)             (\language3). Reported on input line 105.
 Package babel Info: Hyphen rules for 'newzealand' set to \l@ukenglish
-(babel)             (\language11). Reported on input line 108.
+(babel)             (\language3). Reported on input line 108.
 ))
 (/usr/share/texlive/texmf-dist/tex/latex/tools/xspace.sty
 Package: xspace 2014/10/28 v1.13 Space after command names (DPC,MH)
@@ -247,19 +247,19 @@ Overfull \vbox (167.28416pt too high) has occurred while \output is active []
 
 [1] [1] [1] [1] [1] [1] [1] [1] [1] [1] (./cover.aux) ) 
 Here is how much of TeX's memory you used:
- 3417 strings out of 478287
- 56488 string characters out of 5849288
- 377506 words of memory out of 5000000
- 21572 multiletter control sequences out of 15000+600000
+ 3417 strings out of 480113
+ 56488 string characters out of 5892773
+ 372912 words of memory out of 5000000
+ 21339 multiletter control sequences out of 15000+600000
  525335 words of font info for 55 fonts, out of 8000000 for 9000
- 1141 hyphenation exceptions out of 8191
+ 83 hyphenation exceptions out of 8191
  70i,9n,76p,978b,478s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/
 enc/dvips/lm/lm-ec.enc}</usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/
 share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf/fonts/type1/publ
 ic/lm/lmss10.pfb></usr/share/texmf/fonts/type1/public/lm/lmss8.pfb></usr/share/
 texmf/fonts/type1/public/lm/lmssbx10.pfb>
-Output written on cover.pdf (14 pages, 120655 bytes).
+Output written on cover.pdf (14 pages, 120666 bytes).
 PDF statistics:
  79 PDF objects out of 1000 (max. 8388607)
  51 compressed objects within 1 object stream

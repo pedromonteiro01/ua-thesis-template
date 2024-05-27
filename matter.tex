@@ -23,7 +23,7 @@
 
 % Enable for for Overleaf support
 \usepackage{ifthen}
-\def\useoverleaf{1}  % change to non-zero (for instance, 1) to enable it
+\def\useoverleaf{0}  % change to non-zero (for instance, 1) to enable it
 
 \makeatletter
 \newcommand{\makecoverfile}[0]{%
@@ -33,7 +33,6 @@
 
 % For PDF merging
 \usepackage{pdfpages}
-\usepackage{pdflscape}
 
 % Set DPI to 300
 \pdfpxdimen=\dimexpr 1in/300\relax
@@ -44,7 +43,7 @@
 % For English and Portuguese languages
 % Portuguese will be the default.
 % Uncomment \setlanguage below to change it
-\usepackage[english]{babel}
+\usepackage[english,portuguese]{babel}
 
 % Uncomment to use a custom date format
 %\usepackage{datetime}
@@ -168,8 +167,6 @@
 
 % Frames around figures and allow force placement
 \usepackage{float}
-\usepackage{tabularx}
-\usepackage{multirow}
 
 % Configure Float style
 %\floatstyle{boxed}
@@ -203,7 +200,9 @@
   \oldchapter#1{#2}
 }
 
+\usepackage{tabularx}
 
+\usepackage{multirow}
 
 % Use the built-in division styling
 \headstyles{memman}
@@ -238,11 +237,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
+
+% Fix the numbering scheme by having a ghost style for page numbering
+\pagenumbering{Alph}
+
 \ifthenelse{\equal{\useoverleaf}{0}}{}{\makecoverfile{}}%
 \includepdf[pages=-]{cover.pdf}
 
 % Uncomment to enable English
-%\selectlanguage{english}
+\selectlanguage{english}
 
 
 % Front matter
@@ -336,8 +339,8 @@
     {\oldchapter#1{#2}}
 }
 
-\renewcommand{\listingscaption}{Código}
-\renewcommand{\listoflistingscaption}{Lista de Excertos de Código}
+\renewcommand{\listingscaption}{Code}
+\renewcommand{\listoflistingscaption}{List of Code Excerpts}
 \cleardoublepage
 {\small\listoflistings}
 \addcontentsline{toc}{chapter}{\listoflistingscaption}
@@ -368,6 +371,11 @@
 \include{chapters/chapter1}
 \include{chapters/chapter2}
 \include{chapters/chapter3}
+\include{chapters/chapter4}
+\include{chapters/chapter5}
+\include{chapters/chapter6}
+%\include{chapter2}
+%\include{chapter3}
 %\include{chapter4}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -400,8 +408,6 @@
 \mainmatterWithoutReset
 \appendix
 
-% \include{appendix-a}
-% \include{appendix-b}
-% \include{appendix-c}
+\include{chapters/appendix-more}
 
 \end{document}

@@ -9,18 +9,26 @@
 {\endquote}
 
 \begin{literature}
-This chapter delves into a comprehensive analysis of the current state of art in weapon detection and closed-circuit television (\ac{cctv}) systems. The discussion begins with an overview of the general context in Section 2.1, laying the groundwork for a more detailed examination of weapon detection technologies and \ac{cctv} systems. Section 2.2 delves into object detection, reviewing key algorithms and techniques. Section 2.3 focuses on related research, including methodologies, \ac{cctv} setup, and weapon detection analysis. It concludes with a comprehensive examination of datasets and architectural methods in weapon detection research.
+This chapter delves into a comprehensive analysis of the current state of art in weapon detection and \ac{cctv} systems. The discussion begins with an overview of the general context in Section 2.1, laying the groundwork for a more detailed examination of weapon detection technologies and \ac{cctv} systems. Section 2.2 delves into object detection, reviewing key algorithms and techniques. Section 2.3 focuses on related research, including methodologies, \ac{cctv} setup, and weapon detection analysis. It concludes with a comprehensive examination of datasets and architectural methods in weapon detection research.
 \end{literature}
 
 \section{Context}
 \subsection{Weapons}
-The Cambridge Dictionary\footnote{https://dictionary.cambridge.org/dictionary/english/weapon} defines a weapon as "any object used in fighting or war, such as a gun, bomb, knife, etc.". This definition suggests that a weapon encompasses any tool or instrument intended to inflict damage or harm, whether on living beings, structures, or systems. Weapons have diverse applications, ranging from hunting and self-defense to warfare. However, their fundamental purpose remains unchanged: they amplify the user's ability to exert force, in either an offensive or defensive capacity.
+The Cambridge Dictionary\footnote{https://dictionary.cambridge.org/dictionary/english/weapon, accessed on November 2023} defines a weapon 
+as "any object used in fighting or war, such as a gun, bomb, knife, etc.". This definition implies that a weapon 
+is a tool or instrument  that is intended to cause damage or injury, whether to 
+living beings, structures or systems. Weapons have diverse applications, such as hunting, self-defense or warfare. 
+However, their fundamental purpose 
+remains unchanged: they amplify the user's ability to exert force, in either an offensive or defensive capacity.
 
-Weapons can be categorized based on various criteria, including their range, mechanism, or intended use. However, this study will primarily focus on two categories: firearms and melee weapons.
+They are categorized based on diferent criteria: range, mechanism and intented use. However, 
+this study will primarily focus on two categories: firearms and melee weapons.
 
-Melee weapons are close-combat instruments that require the user to be in direct proximity to their target, like swords, daggers, maces, and clubs.
+Melee weapons are close-combat instruments that require the user to be in direct proximity to their target, 
+like swords, daggers, maces, and clubs.
 
-Firearms are a subset of ranged weapons that discharge projectiles powered by rapidly expanding high-pressure gas from chemical reactions. They can be further categorized into:
+Firearms are a subset of ranged weapons that discharge projectiles powered by rapidly expanding high-pressure gas 
+from chemical reactions. They can be further categorized into:
 \begin{itemize}
     \item Handguns: Small, handheld firearms like pistols and revolvers.
     \item Rifles: Designed for accuracy, rifles have a longer barrel and are often used in situations requiring precision.
@@ -28,12 +36,16 @@ Firearms are a subset of ranged weapons that discharge projectiles powered by ra
     \item Automatic and Semi-Automatic: Automatic firearms continuously fire bullets as long as the trigger is pressed, while semi-automatics require a trigger pull for each shot.
 \end{itemize}
 
+Figure \ref{fig:first_image} shows an example of a melee weapon, while 
+Figure \ref{fig:second_image} presents various types of firearms, showcasing the diversity in firearm design and 
+functionality.
+
 \begin{figure}[h]
     \centering
     \begin{minipage}{0.45\textwidth}
         \centering
         \includegraphics[width=1\linewidth]{figs/knife.jpg}
-        \caption{Knife Example}
+        \caption{Melee Weapon Example}
         \label{fig:first_image}
     \end{minipage}\hfill
     \begin{minipage}{0.48\textwidth}
@@ -47,10 +59,14 @@ Firearms are a subset of ranged weapons that discharge projectiles powered by ra
 \subsection{\ac{cctv}}
 \ac{cctv} refers to a video surveillance system comprising strategically positioned cameras in various locations. These cameras capture footage, which is then transmitted to monitors for both real-time observation and later playback.
 
-The primary goal of a \ac{cctv} system is to enhance area security through persistent surveillance of key areas. This is highly beneficial for large spaces or sites containing valuable or sensitive items. Besides recording, \ac{cctv} can issue alerts for detected motion, especially during off-hours in vacant business premises. These alerts are crucial for quickly informing authorities about possible security threats.
+The primary goal of a \ac{cctv} system is to enhance area security through persistent surveillance of key areas. This 
+is highly beneficial for large spaces or sites containing valuable or sensitive items. Besides recording, these systems 
+can issue alerts for detected motion, especially during off-hours in vacant business premises. These alerts are crucial 
+for quickly informing authorities about possible security threats. 
 
-Additionally, \ac{cctv} systems are not only instrumental in monitoring activities during both operational and non-operational hours but also serve as crucial tools in identifying suspects in criminal activities.
-
+Additionally, surveillance systems are instrumental 
+in monitoring activities during both operational and non-operational hours and serve as crucial tools in identifying 
+suspects in criminal activities.
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.45\textwidth]{figs/cctv.jpg}
@@ -59,87 +75,6 @@ Additionally, \ac{cctv} systems are not only instrumental in monitoring activiti
     \caption{\ac{cctv} Cameras (Left Image) and \ac{cctv} Footage Samples (Right Image)}
     \label{fig:cctv-and-footage}
 \end{figure}
-
-\section{Object Detection}
-\subsection{General Concepts}
-Object detection stands as a vital component in the realm of computer vision. \selectlanguage{english}\citet{rfc2} describe its goal as "to determine where objects are located in a given image (object localization) and which category each object belongs to (object classification)", undertaking the dual challenge of not only locating an object within the visual frame, creating a bounding box around it, but also determining its category. \selectlanguage{english}\citet{rfc9} further reinforce this stating "Object detection is a fusion of object location and object classification task".
-
-\begin{figure}[h]
-    \centering 
-    \includegraphics[width=0.5\textwidth]{figs/object-detection.png} 
-    \caption{Object Detection Image~\cite{rfc15}}
-    \label{fig:object-detection}
-\end{figure}
-
-Object detection entails the identification of objects within images and videos. The process of recognizing these objects is fundamentally rooted in the training of object detection models. This crucial training phase involves several key steps:
-\begin{itemize}
-    \item \textbf{Data Collection}: Gathering a diverse set of images, each showcasing the object in a variety of contexts, including different backgrounds and angles.
-    \item \textbf{Labeling}: Annotating each image with labels to show where the object is and confirming its presence
-    \item \textbf{Feature Learning}: The neural network learns the object's unique features (like shape, color, texture, patterns) from these labeled images.
-    \item \textbf{Generalization}: The ultimate goal of this training is to enable the neural network to not just recognize the object in the training images, but to generalize this knowledge. This allows the model to accurately identify and locate the object in new, unseen images.
-\end{itemize} 
-
-The 2014 milestone, Figure \ref{fig:stage-detectors}, marks a pivotal before-and-after in \ac{ai} applications \selectlanguage{english}\cite{rfc22}. Before, the field predominantly utilized traditional methods for tasks like object detection. These methods involved a multi-step process beginning with the selection of regions in images, which was often inefficient and computationally expensive due to the use of techniques like multi-scale sliding windows. Following this, feature extraction methods such as HOG, Haar-like, and SIFT were employed, but these struggled with variability in backgrounds and lighting conditions. The final step, classification, relied on algorithms like Adaboost, but these traditional techniques frequently fell short in terms of accuracy and efficiency \selectlanguage{english}\cite{rfc9}.
-
-After 2014, the landscape of \ac{ai} research underwent a significant transformation with the advent of deep learning-based methods. These new techniques, including \ac{frcnn}, \ac{ssd}, and \ac{yolo}, revolutionized object detection by automatically learning feature representations from data. This shift not only addressed the limitations of the traditional methods, such as high computational costs and inadequate feature representation, but also led to substantial improvements in both the accuracy and efficiency of object detection processes.
-
-\begin{figure}[h]
-    \centering 
-    \includegraphics[width=0.97\textwidth]{figs/roadmap-stage.png} 
-    \caption{Object Detection Roadmap~\cite{rfc22}}
-    \label{fig:stage-detectors}
-\end{figure}
-
-There are two primary methodologies, Figure \ref{fig:stage-detectors}, employed for identifying and classifying objects. These methodologies differ significantly in their operational approach and performance characteristics.
-
-Firstly, there is the \textbf{two-stage} detection process. This operate in a sequential two-phase process. The process involves two key steps: "(i) use a Region Proposal Network to generate regions of interests in the first stage and (ii) send the region proposals down the pipeline for object classification and bounding-box regression"\selectlanguage{english}\cite{rfc21}. The two-stage framework ensures high accuracy but at the cost of speed.
-
-Conversely, \textbf{one-stage} detectors treat object detection as a simple regression problem, directly analyzing the image to determine class probabilities and bounding box coordinates. This approach is faster but generally achieves lower accuracy rates compared to two-stage detectors \selectlanguage{english}\cite{rfc23}.
-
-In the field of object detection a variety of metrics are employed to evaluate the performance of detection models. These metrics play a crucial role in both training and testing stages, optimizing classifiers, and measuring their efficiency. 
-
-Precision is calculated as the percentage of correctly identified objects (true positives) among all detections (true and false positives). High precision indicates a low rate of false positives. Recall assesses the model's ability to detect all relevant objects in the dataset. It is the percentage of correctly detected objects (true positives) among all actual objects (sum of true positives and false negatives). High recall implies that the model is effective in identifying most of the relevant objects \selectlanguage{english}\cite{rfc25}.
-
-Following this, accuracy measures the overall correctness of the model, reflecting the proportion of all true results (true positives and true negatives) against the total number of cases.
-
-The \ac{ap} metric integrates precision and recall at different confidence thresholds. It addresses the trade-off between precision and recall, considering detections above a confidence level. \ac{ap} is calculated based on the area under the precision-recall curve \selectlanguage{english}\cite{rfc25}. \ac{map} averages the \ac{ap} across all classes within a database, crucial for assessing multi-class detector performance \selectlanguage{english}\cite{rfc24}. 
-
-F1 score is used to estimate the balance between recall and precision. It is particularly valuable in situations where there is an imbalanced class distribution, as it provides a single metric that combines both precision and recall. Is defined as the harmonic mean\footnote{type of average that gives equal weight to both precision and recall, unlike the arithmetic mean which can be disproportionately influenced by high values of one metric over the other} of precision and recall, \ref{eq:f1score}. 
-
-\begin{equation}
-    F1 \text{ score} = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}
-    \label{eq:f1score}
-\end{equation}
-    
-A high F1 score indicates both high precision and high recall. This metric is particularly useful in the context of binary classifiers on unevenly distributed datasets, where it provides a more balanced view of a model's performance compared to using precision or recall alone \selectlanguage{english}\cite{rfc9}.
-
-\ac{iou} measures the overlap between the predicted \ac{bb} and the ground truth \ac{bb}, Figure \ref{fig:iou}. It's calculated as the ratio of the intersection area to the union area of these BBs. The resulting \ac{iou} value ranges between 0 and 1, with values closer to 1 indicating more accurate detection. "The IoU, based on the Jaccard Index, measures the overlap between the predicted bounding box and the ground-truth bounding box." \selectlanguage{english}\cite{rfc24}.
-
-\begin{figure}[h]
-    \centering 
-    \includegraphics[width=0.5\textwidth]{figs/iou.png} 
-    \caption{Intersection over Union \selectlanguage{english}\cite{rfc25}}
-    \label{fig:iou}
-\end{figure}
-
-\subsection{Algorithms and Techniques Reviews}
-This section analyzes current object detection algorithms and methodologies, drawing on a range of studies and innovations from various online repositories and databases. It focuses on selected reviews\footnote{comprehensive overview or evaluation of existing literature on a particular topic} that detail their development, methodologies, outcomes, and contributions to the advancement of object detection. This analysis provides insights into the evolution of object detection techniques from their inception to modern applications.
-
-\selectlanguage{english}\citet{rfc2} delve into the evolution of detection methods, offering a comprehensive review of deep learning-based object detection frameworks. The review starts with a historical overview of deep learning, highlighting the role of \ac{cnn}. The focus then shifts to generic object detection architectures, discussing modifications and strategies to enhance detection performance. Through experimental analyses, various methods for detection tasks are compared, and insightful conclusions are drawn.
-
-\selectlanguage{english}\citet{rfc8} provide a comprehensive review of image processing techniques, emphasizing machine learning applications in visual interpretation. The study begins by highlighting the foundational aspects of computational vision, particularly the significance of array-based media computation in the digital era. It then examines key image processing algorithms, including \ac{ssd}, \ac{frcnn}, and \ac{yolo}, detailing their architecture, methodologies, and distinguishing features. The researchers conduct systematic experiments using datasets like Microsoft COCO~\cite{rfc16}, comparing these algorithms to elucidate their respective strengths and limitations.
-
-\selectlanguage{english}\citet{rfc9} emphasize the intricacies of computer vision in their review, highlighting the significant impact of \ac{dcnns}. Their study spans various applications, from video processing to speech recognition, with a particular focus on object detection's importance in areas like transportation and security. They detail crucial evaluation metrics, especially Average Precision (AP), for assessing detection effectiveness. Notably, they mark the pivotal shift to deep learning techniques post-2014, analyzing frameworks like \ac{ssd} and \ac{yolo}. By comparing these newer methods with traditional ones and evaluating their performance on datasets like PASCAL VOC~\cite{rfc27} and MS COCO~\cite{rfc16}, they offer insights into the dynamic field of object detection.
-
-\selectlanguage{english}\citet{rfc10} present an in-depth review of \ac{dl}, focusing on its essential concepts, \ac{cnn} architectures, challenges, and varied applications. The paper initially recognizes DL's increasing prominence in machine learning, often hailed as the 'Gold Standard.' Emphasizing DL's efficiency in processing large datasets, surpassing traditional methods, the authors delve into detailed \ac{cnn} architectures and their operational principles. They also explore both computational and conceptual challenges in DL. The review further highlights the diverse applications of DL, showcasing its often superior, sometimes human-competitive, performance.
-
-\section{Related Work}
-In the quest for enhancing weapon detection capabilities in CCTV systems, a range of significant studies have emerged, each contributing distinctive methodologies, techniques, and insights. 
-
-This section is dedicated to presenting a comprehensive overview of these contributions, systematically organized into focused areas: research methodologies, an in-depth comparative analysis of weapon detection technologies, a thorough exploration of datasets pertinent to this field, and a review of the various architectural approaches employed in weapon detection systems.
-
-\subsection{Research Method}
-This section presents a comprehensive review of critical research in the field of weapon detection. The review is structured into four key areas: \ac{cctv} setup and installation, insights from other researchers' literature, pertinent datasets, and prevalent system architectures. Due to the wide range and variety of articles from different fields, a careful selection method was used. The search, conducted on Scopus, ResearchGate, and arXiv, focused on keywords like "deep," "learning," "real," "time," "weapon," and "detection." This search initially produced a large number of articles. A detailed and strict selection process was then applied to choose the most relevant articles that significantly relate to the main theme.
 
 \subsection{\ac{cctv} System Setup and Configuration}
 Ensuring the effectiveness of a \ac{cctv} security system requires careful consideration of several key factors. Analyzing the environmental context of the camera location is critical. It involves understanding the specific crime dynamics of the area and strategically positioning the cameras to cover high-risk zones. The line-of-sight for each camera also demands attention. To ensure clear visibility, it's important to minimize obstructions such as immovable objects and foliage. Regular maintenance is crucial to clear any new obstructions that may arise. Regular maintenance to clear any new obstructions is also crucial. 
@@ -173,7 +108,7 @@ The design of the cameras significantly influences their ability to prevent crim
     \item Black dots are placed at street intersections and corners, providing broad surveillance coverage;
 \end{itemize}
 
-In this model, cameras positioned at red dots 
+In this model, Figure \ref{fig:cctv-positions}, cameras positioned at red dots 
 would be pivotal for controlling access points, while those at black dots would enable panoramic monitoring 
 of the area, essential for observing multiple streets and deterring potential criminal activity. 
 
@@ -184,8 +119,128 @@ of the area, essential for observing multiple streets and deterring potential cr
     \label{fig:cctv-positions}
 \end{figure}
 
+\section{Object Detection}
+\subsection{General Concepts}
+Object detection stands as a vital component in the realm of computer vision. \selectlanguage{english}\citet{rfc2} describe its goal as "to determine where objects are located in a given image (object localization) and which category each object belongs to (object classification)", undertaking the dual challenge of not only locating an object within the visual frame, creating a bounding box around it, but also determining its category. \selectlanguage{english}\citet{rfc9} further reinforce this stating "Object detection is a fusion of object location and object classification task".
 
-\subsection{Analysis of Existing Datasets in Weapon Detection Research}
+\begin{figure}[h]
+    \centering 
+    \includegraphics[width=0.5\textwidth]{figs/object-detection.png} 
+    \caption{Object Detection Image~\cite{rfc15}}
+    \label{fig:object-detection}
+\end{figure}
+
+Object detection entails the identification of objects within images and videos. The process of recognizing these objects is fundamentally rooted in the training of object detection models. This crucial training phase involves several key steps:
+\begin{itemize}
+    \item \textbf{Data Collection}: Gathering a diverse set of images, each showcasing the object in a variety of contexts, including different backgrounds and angles.
+    \item \textbf{Labeling}: Annotating each image with labels to show where the object is and confirming its presence
+    \item \textbf{Feature Learning}: The neural network learns the object's unique features (like shape, color, texture, patterns) from these labeled images.
+    \item \textbf{Generalization}: The ultimate goal of this training is to enable the neural network to not just recognize the object in the training images, but to generalize this knowledge. This allows the model to accurately identify and locate the object in new, unseen images.
+\end{itemize} 
+
+The 2014 milestone, Figure \ref{fig:stage-detectors}, marks a before-and-after in \ac{ai} applications \selectlanguage{english}\cite{rfc22}. Before, the field predominantly utilized traditional methods for tasks like object detection. These methods involved a multi-step process beginning with the selection of regions in images, which was often inefficient and computationally expensive due to the use of techniques like multi-scale sliding windows. Following this, feature extraction methods such as HOG, Haar-like, and SIFT were employed, but these struggled with variability in backgrounds and lighting conditions. The final step, classification, relied on algorithms like Adaboost, but these traditional techniques frequently fell short in terms of accuracy and efficiency \selectlanguage{english}\cite{rfc9}.
+
+After 2014, the landscape of \ac{ai} research underwent a significant transformation with the advent of deep learning-based methods. These new techniques, including \ac{frcnn}, \ac{ssd}, and \ac{yolo}, revolutionized object detection by automatically learning feature representations from data. This shift not only addressed the limitations of the traditional methods, such as high computational costs and inadequate feature representation, but also led to substantial improvements in both the accuracy and efficiency of object detection processes.
+
+\begin{figure}[h]
+    \centering 
+    \includegraphics[width=0.97\textwidth]{figs/roadmap-stage.png} 
+    \caption{Object Detection Roadmap~\cite{rfc22}}
+    \label{fig:stage-detectors}
+\end{figure}
+
+As seen in figure \ref{fig:stage-detectors} there are two primary methodologies used for for identifying and 
+classifying objects.
+These methodologies differ significantly in their operational approach and performance characteristics.
+
+There is the \textbf{two-stage} detection process that operates in a sequential two-phase process. The process involves two key steps: "(i) use a Region Proposal Network to generate regions of interests in the first stage and (ii) send the region proposals down the pipeline for object classification and bounding-box regression"\selectlanguage{english}\cite{rfc21}. The two-stage framework ensures high accuracy but at the cost of speed.
+
+In contrast, \textbf{one-stage} detectors treat object detection as a simple regression problem, directly analyzing the image to determine class probabilities and bounding box coordinates. This approach is faster but generally achieves lower accuracy rates compared to two-stage detectors \selectlanguage{english}\cite{rfc23}.
+
+In the field of object detection a variety of metrics are employed to evaluate the performance of detection models. These metrics play a crucial role in both training and testing stages, optimizing classifiers, and measuring their efficiency. 
+
+Precision is calculated as the percentage of correctly identified objects (true positives) among all detections (true and false positives). High precision indicates a low rate of false positives. Recall assesses the model's ability to detect all relevant objects in the dataset. It is the percentage of correctly detected objects (true positives) among all actual objects (sum of true positives and false negatives). High recall implies that the model is effective in identifying most of the relevant objects \selectlanguage{english}\cite{rfc25}.
+
+Following this, accuracy measures the overall correctness of the model, reflecting the proportion of all true results (true positives and true negatives) against the total number of cases.
+
+The \ac{ap} metric integrates precision and recall at different confidence thresholds. It addresses the trade-off between precision and recall, considering detections above a confidence level. \ac{ap} is calculated based on the area under the precision-recall curve \selectlanguage{english}\cite{rfc25}. \ac{map} averages the \ac{ap} across all classes within a database, crucial for assessing multi-class detector performance \selectlanguage{english}\cite{rfc24}. 
+
+F1 score is used to estimate the balance between recall and precision. It is particularly valuable in situations where there is an imbalanced class distribution, as it provides a single metric that combines both precision and recall. Is defined as the harmonic mean\footnote{type of average that gives equal weight to both precision and recall, unlike the arithmetic mean which can be disproportionately influenced by high values of one metric over the other} of precision and recall, \ref{eq:f1score}. 
+
+\begin{equation}
+    F1 \text{ score} = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}
+    \label{eq:f1score}
+\end{equation}
+    
+A high F1 score indicates both high precision and high recall. This metric is particularly useful in the context of binary classifiers on unevenly distributed datasets, where it provides a more balanced view of a model's performance compared to using precision or recall alone \selectlanguage{english}\cite{rfc9}.
+
+\begin{figure}[h]
+    \centering 
+    \includegraphics[width=0.5\textwidth]{figs/iou.png} 
+    \caption{Intersection over Union \selectlanguage{english}\cite{rfc25}}
+    \label{fig:iou}
+\end{figure}
+
+\ac{iou} measures the overlap between the predicted \ac{bb} and the ground truth \ac{bb}, Figure \ref{fig:iou}. It's calculated as the ratio of the intersection area to the union area of these \ac{bb}s. The resulting \ac{iou} value ranges between 0 and 1, with values closer to 1 indicating more accurate detection. "The IoU, based on the Jaccard Index, measures the overlap between the predicted bounding box and the ground-truth bounding box." \selectlanguage{english}\cite{rfc24}.
+
+\subsection{Algorithms and Techniques Reviews}
+This section analyzes current object detection algorithms and methodologies, drawing on a range of studies and 
+innovations from various online repositories and databases. It focuses on selected 
+reviews\footnote{comprehensive overview or evaluation of existing literature on a particular topic} 
+that detail their development, methodologies, outcomes, and contributions to the advancement of object 
+detection. This analysis provides insights into the evolution of object detection techniques from their 
+inception to modern applications.
+
+\selectlanguage{english}\citet{rfc2} delve into the evolution of detection methods, offering a comprehensive review 
+of deep learning-based object detection frameworks. The review starts with a historical overview of deep learning, 
+highlighting the role of \ac{cnn}. The focus then shifts to generic object detection architectures, discussing 
+modifications and strategies to enhance detection performance. Through experimental analyses, various methods 
+for detection tasks are compared, and insightful conclusions are drawn.
+
+\selectlanguage{english}\citet{rfc8} provide a comprehensive review of image processing techniques, 
+emphasizing machine learning applications in visual interpretation. The study begins by highlighting the 
+foundational aspects of computational vision, particularly the significance of array-based media computation 
+in the digital era. It then examines key image processing algorithms, including \ac{ssd}, \ac{frcnn}, and \ac{yolo}, 
+detailing their architecture, methodologies, and distinguishing features. The researchers conduct systematic experiments 
+using datasets like Microsoft COCO~\cite{rfc16}, comparing these algorithms to elucidate their respective strengths and 
+limitations.
+
+\selectlanguage{english}\citet{rfc9} emphasize the intricacies of computer vision in their review, highlighting 
+the significant impact of \ac{dcnns}. Their study spans various applications, from video processing to speech 
+recognition, with a particular focus on object detection's importance in areas like transportation and security. 
+They detail crucial evaluation metrics, especially \ac{ap}, for assessing detection effectiveness. Notably, they 
+mark the pivotal shift to deep learning techniques post-2014, analyzing frameworks like \ac{ssd} and \ac{yolo}. 
+By comparing these newer methods with traditional ones and evaluating their performance on datasets like 
+PASCAL VOC~\cite{rfc27} and MS COCO~\cite{rfc16}, they offer insights into the dynamic field of object detection.
+
+\selectlanguage{english}\citet{rfc10} present an in-depth review of \ac{dl}, focusing on its essential 
+concepts, \ac{cnn} architectures, challenges, and varied applications. The paper initially recognizes \ac{dl}'s 
+increasing prominence in machine learning, often hailed as the 'Gold Standard.' Emphasizing \ac{dl}'s efficiency in 
+processing large datasets, surpassing traditional methods, the authors delve into detailed \ac{cnn} architectures 
+and their operational principles. They also explore both computational and conceptual challenges in \ac{dl}. The 
+review further highlights the diverse applications of \ac{dl}, showcasing its often superior, sometimes 
+human-competitive, performance.
+
+\section{Related Work}
+In the quest for enhancing weapon detection capabilities in \ac{cctv} systems, a range of significant studies 
+have emerged, each contributing distinctive methodologies, techniques, and insights. 
+
+This section is dedicated to presenting a comprehensive overview of these contributions, systematically organized 
+into focused areas: research methodologies, an in-depth comparative analysis of weapon detection technologies, a 
+thorough exploration of datasets pertinent to this field, and a review of the various architectural approaches 
+employed in weapon detection systems.
+
+\subsection{Research Method}
+This section presents a comprehensive review of critical research in the field of weapon detection. 
+The review is structured into three key areas: insights from other 
+researchers' literature, pertinent datasets, and prevalent system architectures. Due to the wide range 
+and variety of articles from different fields, a careful selection method was used. The search, conducted on 
+Scopus, ResearchGate, and arXiv, focused on keywords like "deep," "learning," "real," "time," "weapon," and 
+"detection." This search initially produced a large number of articles. A detailed and strict selection process 
+was then applied to choose the most relevant articles that significantly relate to the main theme, 
+resulting in a final count of 16 documents.
+
+\subsection{Analysis of Datasets in Weapon Detection}
 In real-time weapon detection, using datasets that mimic real-world situations is crucial.
 
 In~\citet{rfc3} study, the dataset comprises three distinct classes: short guns, long guns, and knives - Figure \ref{fig:rehman-dataset}. This dataset is gathered from a variety of platforms, including surveillance videos from YouTube, simulations of firearms and knives created within the Unity framework, and images of pistols, revolvers, and knives from the Open Images Dataset as well as Kaggle. For video, a set of individual frames was extracted and manually labeled using the LabelImg Python utility. To enhance the model's training performance, data augmentation techniques were employed.
@@ -217,7 +272,7 @@ In~\citet{rfc3} study, the dataset comprises three distinct classes: short guns,
 
 \selectlanguage{english}\citet{rfc20} used the ARMAS Weapon Detection Dataset and IMFDB Weapon Detection System \cite{rfc28} for firearm-related crime image collection. The datasets included 3000 and 4940 images of pistols and rifles, respectively. These images underwent preprocessing to fit object detection standards and were split into training and testing sets in an 80:20 ratio.
 
-\subsection{Review of Architectural Approaches in Weapon Detection}
+\subsection{Architectural Approaches in Weapon Detection}
 The evolution of real-time weapon detection systems has been significantly influenced by diverse architectural approaches proposed by various researchers. This section delves into a brief analysis of some of these architectures.
 
 \selectlanguage{english}\citet{rfc44} system's operation begins with a Raspberry Pi Camera, which serves as the image capture device, feeding live images into the processing unit, a Raspberry Pi. Once the images are pre-processed, they are fed into a pre-trained Deep Neural Network (DNN) weapon detection model. Upon successful detection of a weapon, the system activates an alert mechanism. Finally, the system sends a notification along with the images of the detected weapon to a smartphone.
@@ -251,7 +306,7 @@ The \citet{rfc7} system initiates surveillance and processes the input from two 
 \subsection{Comparative Analysis of Weapon Detection Technologies}
 \selectlanguage{english}\citet{rfc3} point out the concern of incidents involving firearms and knives due to insufficient security checks. Despite \ac{cctv}s have become prevalent, their constant surveillance demands often surpass human monitoring capabilities. The paper introduces an automated weapon detection system, which employs the \ac{yolo}v5 deep learning model, adapted to a carefully selected dataset. The obtained results achieved a F1 score of 0.95 when applied to \ac{cctv} footage.
 
-\selectlanguage{english}\citet{rfc4} emphasize the importance of security for economic growth and attracting investors and tourists. The study addresses the difficulty of detecting weapons in real-time, considering problems like different angles, blocked views, and hidden weapons. A dataset was adapted by the researchers from diverse sources, including original photos, online repositories, and even film databases. Their exploration spanned several algorithms, like VGG16, Inception variants, and \ac{yolo} iterations. Through rigorous testing prioritizing precision and recall over mere accuracy, \ac{yolo}v4 emerged as the frontrunner, achieving a F1-score of 0.91 and a mean average precision of 0.92. To illustrate the methodology behind the advanced surveillance techniques discussed, Figure \ref{fig:bhatti-chart} provides a schematic overview of the relationship between object recognition, including classification and localization, and object detection.
+\selectlanguage{english}\citet{rfc4} emphasize the importance of security for economic growth and attracting investors and tourists. The study addresses the difficulty of detecting weapons in real-time, considering problems like different angles, blocked views, and hidden weapons. A dataset was adapted by the researchers from diverse sources, including original photos, online repositories, and even film databases. Their exploration spanned several algorithms, like VGG16, Inception variants, and \ac{yolo} iterations. Through rigorous testing prioritizing precision and recall over mere accuracy, \ac{yolo}v4 emerged as the frontrunner, achieving a F1-score of 0.91 and a \ac{map} of 0.92. To illustrate the methodology behind the advanced surveillance techniques discussed, Figure \ref{fig:bhatti-chart} provides a schematic overview of the relationship between object recognition, including classification and localization, and object detection.
 
 \begin{figure}[ht]
     \centering 
@@ -318,7 +373,7 @@ Table \ref{models-results} provides a comparative summary of the weapon detectio
 
 Figure \ref{fig:models-distribution} presents the distribution of different models utilized in previous weapon detection studies, with YOLO models being the predominant choice at 55.6\%, featured in over half of the articles. 
 
-Meanwhile, Figure \ref{fig:metrics-distribution} displays the evaluation metrics that researchers selected for assessing weapon detection models. The Accuracy Rate is the leading metric, employed in 41.7\% of the studies, followed by the F1 Score, which is used in 33.3\% of the cases. The Mean Average Precision (mAP) and Intersection over Union (IoU) metrics are less commonly used, at 16.7\% and 8.3\% respectively.
+Meanwhile, Figure \ref{fig:metrics-distribution} displays the evaluation metrics that researchers selected for assessing weapon detection models. The Accuracy Rate is the leading metric, employed in 41.7\% of the studies, followed by the F1 Score, which is used in 33.3\% of the cases. The \ac{map} and \ac{iou} metrics are less commonly used, at 16.7\% and 8.3\% respectively.
 \begin{figure}[h]
     \centering
 

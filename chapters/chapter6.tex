@@ -1,0 +1,30 @@
+\chapter{Conclusions and Future Work}
+\label{chapter:conclusion}
+
+\newenvironment{conclusion}
+{\quote\itshape}
+{\endquote}
+
+\begin{conclusion}
+\end{conclusion}
+
+\section{Summary}
+\section{Conclusions}
+\section{Future Work}
+The current implementation of this surveillance system provides a robust platform for monitoring through multiple 
+camera feeds. However, to enhance its utility and performance, several improvements are proposed for future iterations.
+
+\begin{itemize}
+    \item Implementation of Auto-Scaling Mechanisms: allow the system to 
+    dynamically adjust its resources based on workload demands. This will involve integrating monitoring tools 
+    and automated scaling policies.
+    Additionally, exploring container orchestration platforms 
+    like Kubernetes will be essential for managing resource allocation and scaling efficiently.
+    \item Upgrading System Hardware: the addition of real-time object detection across multiple feeds needs a 
+    corresponding upgrade in system hardware. As the number of cameras and the computational load increase, there is 
+    a substantial impact on system performance. To mitigate this, an enhancement in both CPU and GPU capabilities will 
+    be required. This upgrade will ensure that the system can handle the increased processing demands without degradation 
+    in performance;
+    \item Exploration of Advanced Object Detection Models: the implementation of newer versions of the YOLO 
+    algorithm should be explored. These versions can offer improvements in detection accuracy.
+\end{itemize}
