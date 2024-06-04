@@ -1,128 +1,177 @@
-\chapter{Methodology}
-\label{chapter:architecture}
+\chapter{System Design and Requirements}
+\label{chapter:design}
 
-\newenvironment{architecture}
+\newenvironment{design}
 {\quote\itshape}
 {\endquote}
 
-\begin{architecture}
-\end{architecture}
+\begin{design}
+    This chapter explores the primary architecture that supports the application, outlining its core components and 
+    interactions. Also, it covers the basic use cases, along with a comprehensive examination of both 
+    functional and non-functional requirements essential for the system's optimal performance.
+\end{design}
 
-\section{Sources and Origins of the Dataset}
-Constructing a dataset that covers all possible scenarios presents a significant challenge. However, it is feasible to create a comprehensive dataset by including images that represent factors that complicate detection, such as low lighting conditions and poor image resolution. 
-
-The comprehensive exploration and analysis of various online datasets, like COCO \cite{rfc16} and CAVIAR \cite{rfc30}, played a key role in the development of an advanced and realistic dataset, aiming to mirror real-life scenarios, thereby enhancing its applicability in practical contexts. To this end, the dataset integrates images derived from a mock attack scenario \cite{rfc45}, simulating real-world environments like corridors and an entrance area in a university setting. These images, captured from three surveillance cameras, showcase individuals wielding weapons and other scenarios. 
+\section{Basic Use Cases}
+The diagram \ref{fig:use-cases} outlines the primary use cases of the application, structured around the user 
+interaction flow.
 
 \begin{figure}[h]
-    \centering
-
-    % Image 1
-    \begin{minipage}{0.47\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{figs/cam1.jpg} % Include the image
-        \caption{Mock Attack Dataset\cite{rfc45} Cam 1 frame}
-        \label{fig:cam1}
-    \end{minipage}
-    \hfill
-    % Image 2
-    \begin{minipage}{0.47\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{figs/cam5.jpg} % Include the image
-        \caption{Mock Attack Dataset\cite{rfc45} Cam 5 frame}
-        \label{fig:cam5}
-    \end{minipage}
-
+    \centering 
+    \includegraphics[width=0.6\textwidth]{figs/use-cases3.png} 
+    \caption{System Basic Use Cases}
+    \label{fig:use-cases}
 \end{figure}
 
-The cameras, strategically placed in two different corridors and one entrance, provide a variety of angles and positions, resulting in a rich and diverse visual dataset. Camera 1, in a corridor, recorded 607 frames amidst uniform lighting and obstructions like doors, Figure \ref{fig:cam1}. Camera 7, also in a corridor, gathered 3511 frames, with more complex environments including fire extinguishers. Camera 5, at the entrance, Figure \ref{fig:cam5}, added 1031 frames, distinguished by irregular lighting and obstacles like a black carpet. Annotated at 2 frames per second, these images from different perspectives provide a diverse and realistic depiction of the simulated scenarios.
+At the initial stage, users are presented with a list of all cameras that are registered under their account. 
 
-Additionally, the dataset incorporates a selection of more general images of exposed weapons from the DaSCI collection \cite{rfc29}. This inclusion broadens the scope of the dataset, providing a more comprehensive view of weapon imagery. It also includes images that diverge from the theme of weapons and knives, featuring everyday objects such as wallets or bicycles.
+This list not only displays each camera but also includes information such as the camera's location and current operational
+status. Users can conveniently view real-time video streams from these cameras through the application's interface.
 
-In the process of creating this dataset, it was necessary to convert annotations from .xml files to .txt format to ensure compatibility with the YOLOv5 format.
+Upon viewing the list, users can select any camera to access a more detailed monitoring view. This action 
+redirects to a specific page where the video feed from the chosen camera is displayed. This page works 
+as the hub for real-time video analysis. While monitoring the video feed, the application actively scans the stream 
+for the presence of weapons. If the detection model identifies a weapon within the video, the system generates an alert.
 
-In total, the dataset comprises 11020 images. A strategic division of these images allocates 80\% for training purposes. This portion is crucial for the development and refinement of the object detection model, allowing for extensive learning and adaptation based on a wide array of visual inputs. The remaining 20\% of the images are used for testing. 
+In addition the application supports the upload of pre-recorded videos. Users can upload video files to the platform, which 
+are then analyzed by the same detection algorithms used for live streaming.
 
-Table \ref{datasets-table} presents a dataset summary, listing the source, number of images, resolution, format, and a brief description.
-\begin{table}[ht]
-    \centering
-    \begin{tabularx}{\textwidth}{|l|l|l|l|X|}
-    \hline
-    \textbf{Source} & \textbf{Images} & \textbf{Resolution} & \textbf{Format} & \textbf{Description} \\ \hline
-    \multirow{2}{*}{DaSCI \cite{rfc29}} & 5371 & * & .jpg & Variety of weapons displayed in different positions \\ \cline{2-5}
-        & 500 & * & .jpg & Random everyday objects \\ \hline
+After uploading a video for analysis, the system processes and annotates the footage with bounding boxes to 
+highlight detected weapons. Once the analysis is complete, users have the option to download the annotated video.
 
-    \multirow{3}{*}{\centering Mock Attack Dataset \cite{rfc45}} & 607 & 1920x1080 & .png & 
-    Cam1: located in one of two corridors, with uniform lighting and some conflicting objects such as doors or bins. \\ \cline{2-5}
-     & 3511 & 1920x1080 & .png & 
-    Cam5: at the entrance of a university module, features objects like a black carpet on the floor, with irregular lighting. \\ \cline{2-5}
-     & 1031 & 1920x1080 & .png & 
-    Cam7: in the other corridor, similar to Cam1 but with more conflicting objects. \\ \hline
-    \end{tabularx}
-    \caption{Summary of Image Datasets and Their Characteristics}
-    \label{datasets-table}
-\end{table}
+Users can also access a comprehensive log of all detection events. This historical data includes detailed information 
+about each detection instance, such as the date, time, and frame, enabling users to review past incidents and 
+analyze detection patterns over time.
+
+\section{Functional Requirements}
+The main goal is to design and implement a real-time weapon detection system capable of 
+analyzing surveillance footage and triggering immediate alerts. A prototype showcasing this functionality was developed. 
+However, during testing and demonstrations, limitations became evident. Sometimes video streams wouldn't load consistently, 
+and alerts were slow to generate. Feedback from security personnel emphasized the need for a more user-friendly 
+interface, allowing for quick navigation between cameras and detailed information about detections.
+
+These critical insights guided the development of the core functionalities outlined below:
+
+\begin{enumerate}
+    \item Video Stream Handling
+    \begin{itemize}
+    \item The system shall accept video feeds from various sources, continuously monitoring the video streams 
+    and analyze frames for weapon detection;
+    \end{itemize}
+    \item Detection and Alert Mechanism
+    \begin{itemize}
+    \item The system shall employ an advanced image recognition algorithm to detect weapons with at least 95\% accuracy;
+    \item The system shall generate real-time alerts upon detecting a weapon;
+    \item The system shall classify and log each detection event, including time, location, and type of weapon detected;
+    \end{itemize}
+    \item User Interface
+    \begin{itemize}
+    \item The system shall offer a user-friendly interface with a dashboard displaying all active video streams;
+    \item The interface shall allow operators to navigate easily between different video feeds and alert logs;
+    \item The interface shall provide real-time notifications and display detailed information about each detection event;
+    \end{itemize}
+    \item Data Management
+    \begin{itemize}
+    \item The system shall store video footage and detection logs securely;
+    \item The system shall allow authorized personnel to access and retrieve stored video footage and 
+    logs for review and analysis;
+    \end{itemize}
+    \item Access Control and Security
+    \begin{itemize}
+    \item The system shall implement user authentication mechanisms to verify the identity of users;
+    \end{itemize}
+    \item Reliability and Availability
+    \begin{itemize}
+    \item The system shall include failover protocols to switch to backup systems in case of hardware or software failures;
+    \item The system shall monitor its own health and alert administrators to potential issues or failures;
+    \end{itemize}
+    \item Performance Monitoring
+    \begin{itemize}
+    \item The system shall continuously monitor its performance, including latency and throughput metrics;
+    \item The system shall log performance data and provide administrators with tools to analyze and 
+    optimize system performance;
+    \item The system shall generate reports on detection accuracy and system performance for regular review.
+    \end{itemize}
+    \end{enumerate}
 
 \section{High Level Architecture}
-Figure \ref{fig:architecture-proposal} illustrates the proposed architecture for the system designed to automatically detect weapons. This system not only identifies weapons but also notifies relevant authorities upon detection. 
+Figure \ref{fig:architecture-proposal} illustrates the architecture for the proposed system to 
+automatically detect weapons. 
 
 \begin{figure}[ht]
     \centering 
-    \includegraphics[width=0.95\textwidth]{figs/architecture2.png} 
+    \includegraphics[width=0.95\textwidth]{figs/high-level.png} 
     \caption{High Level Architecture Proposal}
     \label{fig:architecture-proposal}
 \end{figure}
 
-The Video Input (Real-Time Video) [1] consisting of \ac{cctv} cameras strategically installed across various locations, serves as the primary source of video data. These cameras are engineered to capture and transmit real-time video footage, which is then relayed frame by frame to the system for subsequent processing.
+% The Video Input (Real-Time Video) [1] consisting of \ac{cctv} cameras strategically installed across various locations, serves as the primary source of video data. These cameras are engineered to capture and transmit real-time video footage, which is then relayed frame by frame to the system for subsequent processing.
 
-The Queue Management component [2] plays a key role in regulating the incoming data flow. It is specifically tasked with receiving video frames from the \ac{cctv} cameras and systematically queuing them for processing. This component is crucial for several reasons:
+The module Video Input (Real-Time Video) [1] aims to feed the system with real-time video using the various \ac{cctv} 
+cameras that are spread across various locations.  The video is presented to the system frame by frame, and analyzed 
+in the following modules.
+
+% The Queue Management component [2] plays a key role in regulating the incoming data flow. It is specifically tasked with receiving video frames from the \ac{cctv} cameras and systematically queuing them for processing. This component is crucial for several reasons:
+The Queue Management component [2] deals with incoming data from previous module, and redeals with incoming data 
+from previous module, and regulates the sequence flow. This is a management task, from the balance of received frames 
+and sending to futher analysis. Therefore, the following items enumerates the tasks that are associated to this module:
+
 \begin{itemize}
-    \item Load Balancing: effectively manages the influx of video frames, particularly crucial during periods of high input. Without this system, the backend could become overwhelmed, potentially leading to delays or processing failures.
-    \item Prioritization: allows for the prioritization of certain video frames or streams, especially those from high-risk areas, ensuring they are processed earlier.
-    \item Scalability: as the system expands to accommodate more video sources, Queue Management enables efficient scaling without necessitating significant modifications to the backend processing infrastructure.
+    \item Load Balancing: manages the influx of video frames, particularly crucial during periods of high input. Without this, the backend could become overwhelmed, potentially leading to delays or processing failures;
+    \item Prioritization: allows the prioritization of video frames or streams, especially those from high-risk areas;
+    \item Scalability: enables efficient scaling without necessitating significant modifications to the backend processing infrastructure.
 \end{itemize}
 
-The backend [3] serves as the system's central processing unit, encompassing a variety of integral modules:
+The backend [3] serves as the system's "central processing unit". It is composed by a set of submodules:
 \begin{itemize}
-    \item Object Detection Model [3.1]: designed to identify objects of interest, primarily focusing on potentially dangerous items like firearms and knives. It operates with a pre-trained model, which has been finely tuned to pinpoint threats with precision.
-    \item Database [3.2]: central to the system's functionality, the database is utilized for storing a wide range of critical data. This includes video metadata, logs of detected objects, model-related data, and other pertinent information that supports the system's operational integrity.
-    \item Alerting Service [3.3]: key component of the system, playing a crucial role in ensuring safety. Upon detection of a hazardous object, it promptly generates notifications/alerts. These alerts are then swiftly relayed to the frontend, thereby enabling law enforcement officials to receive real-time updates and respond accordingly.
+    \item Object Detection Model [3.1]: designed to identify objects of interest, primarily focusing on potentially dangerous items like firearms and knives. It operates with a pre-trained model that was trained on a dataset, which has been finely tuned to pinpoint threats with precision.
+    \item Alerting Service [3.2]: upon detection of a hazardous object, it promptly generates notifications/alerts. These alerts are then swiftly relayed to the frontend, thereby enabling law enforcement officials to receive real-time updates and respond accordingly.
 \end{itemize}
 
-The frontend [4] constitutes a web interface, acting as the primary point of interaction for users, specifically law enforcement officers. It is possible to upload video files directly through the frontend for subsequent analysis. Moreover, it serves as a dynamic platform for receiving timely updates and alerts regarding any detected objects, thereby streamlining the communication process and enhancing the efficiency of law enforcement responses.
+The database [4] stores the critical data gererated by the system, like que video metadata, logs of detected objects, 
+model-related data, and other information that supports the system.
 
-\section{Dataset-Model Preliminary Results}
-A script was specifically developed to automate the parameter selection for YOLOv5, an advanced deep learning model for object detection. This script not only simplified the model's configuration process but also generated multiple metrics for each test, providing a comprehensive assessment of the model's performance under various parameter settings.
+Finally, the Frontend [5] enables the interface between system and end users (such as law enforcement officers). Tasks like the uploading of video files for analysis can be performed throw  this interface. Moreover, it serves as a dynamic platform for receiving timely updates and alerts regarding any detected objects, thereby streamlining the communication process and enhancing the efficiency of law enforcement responses.
 
-The generated YOLOv5 was then utilized to train and test on the dataset created before with images from Mock Attack Dataset \cite{rfc45}. The model demonstrated an accuracy of 0.9 and, as shown in the F1-confidence curve \ref{fig:f1-score}, achieved an F1 score of 0.87 at a confidence threshold of 0.247. This was achieved following 100 training epochs and using a batch size of 64.
+\section{Non-Functional Requirements}
+This section outlines the non-functional requirements essential for the system's successful implementation and operation.
+Non-functional requirements define the system's operational attributes, which are crucial to ensuring the system's 
+efficiency and effectiveness in real-world scenarios. 
 
-\begin{figure}[h]
+The non-functional requirements can be categorized as follows:
+\begin{enumerate}
+    \item Performance
+    \begin{itemize}
+        \item Latency: the system must process video frames with minimal delay to ensure real-time detection;
+        \item Throughput: the system should handle multiple video streams simultaneously without significant 
+        performance degradation;
+        \item Accuracy: high detection accuracy is essential to minimize false positives and false negatives;
+    \end{itemize}
+    \item Reliability and Availability
+    \begin{itemize}
+        \item Uptime: the system must maintain high availability, ensuring
+        continuous surveillance and monitoring without interruptions;
+        \item Fault Tolerance: the system should be resilient to hardware and software failures;
+        %\item Accuracy: High detection accuracy is essential to minimize false positives and false negatives. 
+    \end{itemize}
+    \item Security
+    \begin{itemize}
+        \item Data Protection: the system must ensure the confidentiality and integrity of video footage. This includes 
+        secure data transmission and storage using encryption methods to prevent unauthorized access;
+        \item Access Control: strict access control mechanisms should be implemented to restrict system usage to 
+        authorized personnel only;
+    \end{itemize}
+    \item Usability
+    \begin{itemize}
+        \item User Interface: the system must provide an intuitive and user-friendly interface for 
+        operators. This
+        includes clear visual indicators for detected threats and straightforward navigation to view 
+        video feeds and alerts.
+    \end{itemize}
+  \end{enumerate}
+
+  \begin{figure}[ht]
     \centering 
-    \includegraphics[width=0.65\textwidth]{figs/f1-score.png} % Include the image
-        \caption{F1-score results with 100 epochs and using a batch size of 64}
-        \label{fig:f1-score}
-\end{figure}
-
-Figure \ref{fig:cam1-frame} exhibits an output from the Cam1 footage, processed using the fine-tuned YOLOv5 model, captured from the Mock Attack Dataset \cite{rfc45}.
-
-The model has annotated three objects with bounding boxes, identifying them as potential weapons with varying degrees of confidence: one at 0.61, and two others at 0.65 and 0.75, and a knife at a confidence of 0.55. 
-
-\begin{figure}[h]
-    \centering 
-    \includegraphics[width=0.6\textwidth]{figs/cam1-frame.png} % Include the image
-        \caption{Model-generated Cam1 frame showing weapon detection with confidence scores}
-        \label{fig:cam1-frame}
-\end{figure}
-
-\section{Work Plan and Milestones}
-The thesis's work plan is presented in the Gantt chart (Figure \ref{fig:gantt}), which maps out the timeline for each task to the development process. This chart illustrates a strategic methodology, guaranteeing a methodical and efficient advancement of the project. 
-
-The efficiency of the project results from the implementation of a bottom-up\footnote{approach where the development process begins with the smallest or most basic elements, gradually integrating these into a comprehensive system or structure} approach. This method, reflecting the architectural design strategy previously mentioned, is crucial for success. It facilitates the iterative building of a system that is both robust and scalable.
-
-In parallel, the thesis writing progresses in an iterative manner alongside the development tasks. This simultaneous documentation approach ensures the continuous incorporation of new insights and findings into the thesis. This strategy not only enriches the content but also guarantees that the documentation aligns with the ongoing development.
-
-\begin{figure}[ht]
-    \centering 
-    \includegraphics[width=\textwidth]{figs/gantt.png} % Include the image
-        \caption{Gantt chart timeline for project management and development stages}
-        \label{fig:gantt-chart}
+    \includegraphics[width=0.65\textwidth]{figs/requirements.png} 
+    \caption{Non-Functional Requirements}
+    \label{fig:non-requirements}
 \end{figure}

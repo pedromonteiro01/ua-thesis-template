@@ -1,4 +1,4 @@
-\chapter{Implementation}
+\chapter{SafeGuard System}
 \label{chapter:implementation}
 
 \newenvironment{implementation}
@@ -6,135 +6,69 @@
 {\endquote}
 
 \begin{implementation}
+    In this chapter, the SafeGuard implementation architecture is described, detailing each component and the 
+    technology stack utilized, providing a comprehensive overview of how all parts of the system are 
+    integrated and work together.
 \end{implementation}
 
-\section{System Architecture}
-\subsection{Overview of the Complete System}
+\section{Architecture Overview}
 \begin{figure}[h]
     \centering 
-    \includegraphics[width=0.95\textwidth]{figs/implementation-architecture2.png} 
-    \caption{System Architecture Overview}
+    \includegraphics[width=0.95\textwidth]{figs/implementation-architecture6.png} 
+    \caption{Implementation Architecture Overview}
     \label{fig:implementation-arch}
 \end{figure}
-The system, figure \ref{fig:implementation-arch}, begins with a Python script simulating \ac{cctv} footage. This script acts as a producer, sending video frames
-to RabbitMQ, reproducing real-time surveillance.
+Building this weapon detection system architecture, described in figure \ref{fig:implementation-arch},
+ raises several challenges, 
+especially integrating a trained model that detects weapons in real time enviroment,
+and its large-scale deployment.
 
-RabbitMQ plays a key role as a message broker, organizing video streams into queues specific to each user, 
-containing the video streams from their respective cameras. 
-This structure not only helps in managing the video data efficiently but also ensures that each user's data is 
-handled securely and separately.
+First, we developed a Python 3.10 script that simulates the CCTV footage, acting as a producer by sending video 
+frames to the next stage (Queue Management), reproducing real-time surveillance.
+Because we are dealing with various cameras with different video streams, the Queue Management was built under 
+the RabbitMQ \cite{rfc48}, as message broker, which allows to organize video streams into queues
+specific to each user, containing the video streams from their respective cameras. This
+structure not only helps in managing the video data efficiently but also ensures that each
+user's data is handled securely and separately.
 
-The backend of the system is built using Django and employs \ac{gpu}/\ac{cuda} technology to enhance the 
+The backend of the system is built using Django 5.0.6, chosen for its rapid development and maintainability, 
+and employs \ac{gpu}/\ac{cuda} technology to enhance the 
 running of detection model inference, a pre-trained \ac{yolo}v5 object detection model, fine-tuned with multiple
-hyperparameters on a custom dataset to enhance accuracy in detecting weapons.
+hyperparameters.
 This component consumes the video data queued in RabbitMQ, 
-processing each frame. 
-The backend supports user authentication and CRUD (Create, Read, Update, Delete) operations, 
+processing each frame. Acting as the system's backbone, it coordinates both video processing and user 
+management. Additionally, it supports user authentication and CRUD (Create, Read, Update, Delete) operations, 
 interacting with a MySQL database essential for storing and managing user data and detection logs.
-
-The backend works as the backbone of the system, coordinating the 
-video data processing and user management.
 
 An essential feature of the system is its ability to detect weapons in the video frames. Upon detection, the backend 
 uses Django Channels and WebSockets to trigger real-time alerts. These alerts are instantly pushed to the frontend, 
 ensuring immediate user notification, which is crucial for prompt response and intervention in 
 security-sensitive situations.
 
-To manage client requests efficiently, Nginx has been added to load balance the requests among three backend services. 
+To manage client requests efficiently, Nginx, known for its speed and efficiency, has been deployed as a load balancer, 
+distributing requests evenly among three backend services.
 Each backend service shares the pre-trained model, ensuring consistency and reliability in detection results. 
-Nginx guarantees high availability and improved performance of the system.
+Nginx's lightweight design minimizes its resource usage, allowing the system to run smoothly, ensuring high 
+availability and improved performance of the system.
 
-The user interface is developed using React designed to be intuitive and user-friendly, providing users with 
-real-time alerts from the backend, a dedicated page listing all cameras associated with them, and a historical log 
-of all detections. Additionally, there is an upload page where users can analyze past recorded videos.
+%The user interface is developed using React 18.0.2 designed to be intuitive and user-friendly, providing users with 
+%real-time alerts from the backend, a dedicated page listing all cameras associated with them, and a historical log 
+%of all detections. Additionally, there is an upload page where users can analyze past recorded videos.
 
-Furthermore, Prometheus and Grafana have been integrated for monitoring and visualization of system performance metrics, 
-ensuring proactive maintenance and real-time tracking of system health.
+The user interface is built with React 18.0.2, influenced by the familiarity with React for creating user-friendly web 
+apps and also for its flexibility. The interface, designed to be intuitive and user-friendly, 
+provides real-time alerts from the backend, a dedicated page listing 
+all associated cameras, and a historical log of detections. Additionally, there's an upload page for analyzing past 
+recorded videos.
 
-\subsection{Basic Use Cases}
-The diagram \ref{fig:use-cases} outlines the primary use cases of the application, structured around the user 
-interaction flow.
-\begin{figure}[h]
-    \centering 
-    \includegraphics[width=0.7\textwidth]{figs/use-cases2.png} 
-    \caption{System Basic Use Cases}
-    \label{fig:use-cases}
-\end{figure}
+Furthermore, Prometheus and Grafana have been integrated for monitoring and visualization of system performance metrics.
+This duo provides a clear picture of how the system is running, allowing for proactive maintenance and real-time 
+tracking of system health.  Prometheus collects data on various aspects of the system's performance, and Grafana 
+transforms this data into easy-to-understand charts and graphs.
 
-At the initial stage, users are presented with a list of all cameras that are registered under their account. 
-
-This list not only displays each camera but also includes information such as the camera's location and current operational
-status. Users can conveniently view real-time video streams from these cameras through the application's interface.
-
-Upon viewing the list, users can select any camera to access a more detailed monitoring view. This action 
-redirects to a specific page where the video feed from the chosen camera is displayed. This page works 
-as the hub for real-time video analysis. While monitoring the video feed, the application actively scans the stream 
-for the presence of weapons. If the detection model identifies a weapon within the video, the system generates an alert.
-
-In addition the application supports the upload of pre-recorded videos. Users can upload video files to the platform, which 
-are then analyzed by the same detection algorithms used for live streaming.
-
-After uploading a video for analysis, the system processes and annotates the footage with bounding boxes to 
-highlight detected weapons. Once the analysis is complete, users have the option to download the annotated video.
-
-Users can also access a comprehensive log of all detection events. This historical data includes detailed information 
-about each detection instance, such as the date, time, and frame, enabling users to review past incidents and 
-analyze detection patterns over time.
-
-\subsection{Client-Server Interaction Flows}
-The system interactions between the client and server, described in figure \ref{fig:flows}, are divided 
-into two main processes, each supporting a different aspect of video management and surveillance. 
-\begin{figure}[h]
-    \centering
-    \begin{subfigure}[b]{0.49\textwidth}
-        \centering
-        \includegraphics[width=\linewidth]{figs/flow1.png}
-        \caption{Real-time Camera Detections Flow}
-        \label{fig:flow1}
-    \end{subfigure}
-    \hfill % spacing
-    \begin{subfigure}[b]{0.49\textwidth}
-        \centering
-        \includegraphics[width=\linewidth]{figs/flow2.png}
-        \caption{Upload/Download Video Flow}
-        \label{fig:flow2}
-    \end{subfigure}
-    \caption{Basic Client-Server Interaction Flows}
-    \label{fig:flows}
-\end{figure}
-
-The \ref{fig:flow1} flow begins with the client logging into the system, establishing a secure session 
-through user authentication. Following successful login, the client requests an authentication token, which the 
-server generates and sends back. This token is crucial for validating the subsequent requests by the client under 
-the secure session.
-
-Once authenticated, the client requests access to the cameras associated with their account. The server responds by 
-retrieving and sending a list of available cameras. The user selects a camera from this list, and the client sends a 
-request to access the selected camera. The server, upon receiving this request, starts streaming video from the chosen 
-camera directly to the client.
-
-During the streaming, if the server's analysis algorithms detect a weapon in the video, it triggers an alert. 
-This alert is then sent to the client, notifying them of the potential threat.
-
-The second flow, \ref{fig:flow2}, also starts with the client logging in and obtaining an authentication token, ensuring a 
-secure environment for data exchange. After login, the client uploads a video file for analysis, using a POST 
-request. This video is selected from the user's local device and is sent to the server.
-
-Upon receiving the video, the server initiates the analysis using a pre-trained object detection algorithm. 
-
-After completing the analysis, the server generates a new version of the video, which is the output 
-of the model, featuring bounding boxes around the detected objects. This annotated video is then made 
-available for the client to download.
-
-\subsection{Folder Structure}
+\section{Folder Structure}
 This section outlines the structure of the project directories and files, designed to support a modular and 
-scalable application, Figure \ref{fig:folder-structure}.
-\begin{figure}[h]
-    \centering 
-    \includegraphics[width=0.7\textwidth]{figs/folder.png} 
-    \caption{Folder Structure Diagram}
-    \label{fig:folder-structure}
-\end{figure}
+scalable application, figure \ref{fig:folder-structure}.
 
 The root directory, \textit{project/}, serves as the central hub containing all the subdirectories and 
 configuration files pertinent to the project. It includes:
@@ -161,12 +95,19 @@ Dockerfile, which specifies how to build the
 Docker container for the React application. 
 The components/ subdirectory holds individual javascript files that define specific parts of the user interface.
 
-\section{Video Retrieval and Management via RabbitMQ}
+\begin{figure}[h]
+    \centering 
+    \includegraphics[width=0.7\textwidth]{figs/folder.png} 
+    \caption{Folder Structure Diagram}
+    \label{fig:folder-structure}
+\end{figure}
+
+\section{Video Retrieval and Management}
 \subsection{RabbitMQ Setup}
 RabbitMQ is a widely adopted message broker that efficiently manages messaging and streaming, making it an ideal 
 choice for applications that require robust and scalable message handling. It is 
 designed for reliability and flexibility, easily deployed across cloud environments, on-premises, or locally, serving 
-millions of users worldwide \citet{rfc48}. Its versatility and reliability make RabbitMQ a fitting backbone for our Django-React 
+millions of users worldwide \cite{rfc48}. Its versatility and reliability make RabbitMQ a fitting backbone for our Django-React 
 application, where it orchestrates video data streaming from simulated \ac{cctv} cameras.
 
 To integrate RabbitMQ into our Django-React application, we employ Docker for containerization, which simplifies the 
@@ -196,11 +137,13 @@ docker-compose.yml file. Below, are outlined the key settings:
 
 \subsection{Message Queuing and Processing}
 The message queuing and processing subsystem is crucial for managing the flow of video data from \ac{cctv} cameras to 
-the processing backend efficiently, as illustrated in Image \ref{fig:rabbit-mq}. 
+the processing backend efficiently, as illustrated in picture \ref{fig:rabbit-mq}. 
 
-RabbitMQ operates by temporarily holding messages in queues until they can be safely processed by consumers. The setup 
-involves configuring RabbitMQ queues for each \ac{cctv} camera source. These queues store video 
-frames encoded as base64 strings, tagged with metadata such as \textit{camera\_id}, \textit{user\_id}, and \textit{timestamp}.
+RabbitMQ operates by holding, temporarily, messages in queues until they can be safely processed by consumers. 
+The setup process involves configuring RabbitMQ queues for each \ac{cctv} camera source. 
+These queues store video frames that are encoded as Base64 strings and tagged with metadata: \textit{camera\_id}, 
+\textit{user\_id} 
+and \textit{timestamp}.
 
 \begin{figure}[h]
     \centering 
@@ -210,7 +153,7 @@ frames encoded as base64 strings, tagged with metadata such as \textit{camera\_i
 \end{figure}
 
 The process initiates with each video file from the \ac{cctv} camera being processed frame by 
-frame. The OpenCV library is used to capture video frames, which are then encoded into a JPEG format using base64 to 
+frame. The OpenCV library \cite{rfc59} is used to capture video frames, which are then encoded into a JPEG format using base64 to 
 facilitate easy transmission over the network. Each frame is packaged into a JSON object containing relevant metadata 
 and pushed to the designated RabbitMQ queue.
 
@@ -222,6 +165,29 @@ To enhance the throughput and responsiveness of the system, the video processing
 threads. Each thread handles a different video source, allowing the system to parallelize the workload effectively.
 \section{Frontend Development}
 \subsection{Views Implementation}
+After authentication, user is presented with the first view which lists all the cameras 
+associated with their account, as showed in figure \ref{fig:camera-list}. This ensures that users have organized access to 
+their specific surveillance resources. 
+
+As mentioned above, the system uses RabbitMQ, which maintains a queue dedicated to each user. When cameras stream video, 
+RabbitMQ receives these frames and forwards them to the backend. 
+From there, the backend processes these 
+frames and sends them to the frontend via WebSockets.
+
+Upon selecting a camera, the user is directed to a second view where the video footage is streamed live, as illustrated in
+ figure \ref{fig:camera-page}. 
+In parallel, the stream is analyzed using an object detection model. The details of this model, which will be discussed 
+subsequently, include the identification of specific objects of interest, in this instance, weapons.
+
+When a weapon is detected, the system triggers an alert that is immediately relayed to the user through a toaster 
+notification on the frontend interface. This alert specifies the type of weapon detected and the confidence level 
+of the detection, providing information immediately to the user. 
+
+Furthermore, the system ensures that all detections are recorded in a database in real time, thus providing a 
+comprehensive and accurate record of events.
+This ability to retain data indefinitely permits retrospective analysis, which can prove 
+instrumental in both investigative and monitoring activities.
+
 \begin{figure}[h]
     \centering
     \begin{subfigure}[b]{0.49\textwidth}
@@ -241,71 +207,41 @@ threads. Each thread handles a different video source, allowing the system to pa
     \label{fig:cameras-list-camera-analysis}
 \end{figure}
 
-Upon logging into the system, the user is presented with the first view which lists all the cameras 
-associated with their account, Figure \ref{fig:camera-list}. This ensures that users have organized access to 
-their specific surveillance resources. 
-
-The system utilizes RabbitMQ, that maintains a queue dedicated to each user. As cameras stream video data, 
-RabbitMQ receives these frames and forwards them to the backend. From there, the backend processes these 
-frames and sends them to the frontend via WebSockets.
-
-Clicking on a camera initiates a navigation to the second view where the video footage is streamed live, Figure 
-\ref{fig:camera-page}. 
-Concurrently, the stream is analyzed using an object detection model. This model, which will be 
-elaborated upon in subsequent sections, scans the video for specific objects of interest, in this case weapons.
-
-When a weapon is detected, the system triggers an alert that is immediately relayed to the user through a toaster 
-notification on the frontend interface. This alert specifies the type of weapon detected and the confidence level 
-of the detection, providing crucial information promptly to the user. 
-
-In addition to real-time alerts, the system ensures that all detections are recorded in a database. 
-This data persistence allows for retrospective analysis and can be instrumental in investigative or 
-monitoring activities.
-
-Users can access this historical data through a History page, Figure \ref{fig:detections-history}, where they can 
-view specific instances of detected weapons, including the time of detection and the captured frame. This page presents 
-a comprehensive overview of all detections found for all the cameras associated with the authenticated user. Each 
-record provides detailed information such as:
-\begin{itemize}
-    \item Weapon Type: type of weapon detected by the object detection model (knife or weapon);
-    \item Time of Detection: exact date and time the weapon was detected;
-    \item Detection Location: shows the camera location of the detection;
-    \item Confidence Level: confidence score from the detection model.
-\end{itemize}
-
-Additionally, each entry includes an option to view the detected frame, where users can open and examine 
-the specific frame where the weapon was identified. 
+Users may access the aforementioned historical data through a History page, as ilustrated 
+in Figure \ref{fig:detections-history}, where 
+they can view specific instances of detected weapons, including the time of detection and the captured frame.
 \begin{figure}[h]
     \centering 
     \includegraphics[width=0.65\textwidth]{figs/history-page.png} 
     \caption{Detections History Page}
     \label{fig:detections-history}
-\end{figure}
+\end{figure} 
 
-The application includes a section dedicated to the analysis of pre-recorded videos, where the users can select and 
-upload a video file, Figure \ref{fig:upload-video}, restricted to .mp4 files. 
+The application includes a section dedicated to the analysis of pre-recorded videos. This section 
+allows users to select and upload a video file in the .mp4 format. %as illustrated in figure \ref{fig:upload-video}.
 
-\begin{figure}[h]
-    \centering 
-    \includegraphics[width=0.65\textwidth]{figs/upload-video-page.png} 
-    \caption{Upload Video File}
-    \label{fig:upload-video}
-\end{figure}
+%\begin{figure}[h]
+%    \centering 
+%    \includegraphics[width=0.65\textwidth]{figs/upload-video-page.png} 
+%    \caption{Upload Video File}
+%    \label{fig:upload-video}
+%\end{figure}
 
 Once a file is uploaded, it appears in a specific list that displays all of the files they have submitted, providing 
 users quick access to their uploaded content and enabling them to track the status of each video.
 
 Each file in the list is followed by a status indicator. If a video has not yet been analyzed, its status 
 will reflect this, and selecting the video will lead the user to a page where the analysis process begins afresh, 
-\ref{fig:upload-video-analysis}. 
+as ilustrated in figure \ref{fig:upload-video-analysis}. 
 Importantly, any previous detections associated with the video are cleared to ensure that the analysis starts from 
 the beginning, providing a clean slate for accurate detection. The analysis must run to the completion of the video 
 for it to be marked with a check, signifying that it has been fully processed.
 
 For videos that have already been analyzed, users can immediately access and download the processed video, \ref{fig:download-video}. 
-This version of the video includes bounding boxes drawn around detected weapons, visually indicating the location 
-and presence of potential threats within the footage. Alongside the video, a detailed table is provided, listing 
-all detections. This table includes the type of weapon detected and the exact timestamp within the video where each 
+The video version presented here includes bounding boxes, drawn around the weapons identified by the system, which 
+visually indicate the location and presence of potential threats within the footage. 
+Alongside the video, a list of detections are provided in a detailed table. 
+This table includes the type of weapon detected, confidence score and the exact timestamp within the video where each 
 weapon appears.
 
 \begin{figure}[h]
@@ -330,8 +266,10 @@ weapon appears.
 By using Docker, the frontend is encapsulated in a controlled, consistent environment, ensuring that all 
 dependencies and configurations are unified across different development and production stages.
 
-The frontend service is built using a Dockerfile that specifies \textit{node:alpine} as the base image, known for its 
-minimal size. The service configuration includes essential commands to set up the 
+The frontend service is built using a Dockerfile 
+\footnote{\url{https://github.com/pedromonteiro01/cctv-real-time-weapon-detection/blob/main/project/frontend/Dockerfile}} 
+that specifies \textit{node:alpine} as the base image. 
+The service configuration includes essential commands to set up the 
 working environment, install dependencies, and prepare the service to be run with the \textit{yarn start} command. 
 Specifically, the \textit{COPY} commands transfer the necessary project files into the container, and the \textit{RUN} 
 command installs all node modules as specified in \textit{yarn.lock}.
@@ -353,19 +291,19 @@ and \ac{e2e} tests.
 %    \label{fig:frontend-tests}
 %\end{figure}
 
-The unit tests were developed using Jest with the main objective to test individual components in isolation. 
+The unit tests were developed using Jest \cite{rfc60} with the main objective to test individual components in isolation. 
 This approach focused on ensuring the correct functionality of each component, examining internal logic, state 
 management, and behavior under various conditions.
 
 Integration tests were also conducted using Jest. These tests are crucial for assessing the interactions between 
 connected components and services. The focus here was on the data flow and state management across components.
 
-For \ac{e2e} testing, was used Selenium with the Firefox driver to simulate real user interactions from start to finish. 
+For \ac{e2e} testing, was used Selenium \cite{rfc61} with the Firefox driver \cite{rfc62} to simulate real user interactions from start to finish. 
 This testing ensures the system behaves as expected in a production-like environment and includes several specific 
 scenarios:
 
 \begin{itemize}
-    \item Login Test: verifies the login process to ensure that authentication works correctly 
+    \item Login Test: ensured that authentication works correctly 
     and the user gains access to their account (code listing \ref{lbl:login-test-code});
     \item Upload Video File for Detection: tested the upload of a video file for 
     analysis, ensuring the application handles file uploads and data processing accurately;
@@ -376,6 +314,7 @@ scenarios:
 \end{itemize}
 
 Below is an excerpt of the login test, code listing \ref{lbl:login-test-code}.
+
 \begin{listing}[h]
     \begin{minted}{python}
     try:
@@ -397,7 +336,7 @@ Below is an excerpt of the login test, code listing \ref{lbl:login-test-code}.
     \label{lbl:login-test-code}
     \end{listing}
 
-The test \ref{lbl:login-test-code} navigates to the login page, inputs the 
+The login test navigates to the login page, inputs the 
 username "pmapm@ua.pt" and 
 password "password", and submits the form. After waiting for 5 seconds, it checks if the URL is 
 http://localhost:3000/personal to verify if the login was successful. Finally, it closes the web driver.
@@ -434,7 +373,52 @@ If the token is valid, the system allows to process the request coming from the 
 For added security, tokens are configured to expire after a certain period. This limits the time an attacker has to 
 use a stolen token. When a token expires, the user must log in again, and a new token is generated.
 
-\subsection{Models}
+\subsection{Client-Server Interaction Flows}
+The system interactions between the client and server, described in figure \ref{fig:flows}, are divided 
+into two main processes, each supporting a different aspect of video management and surveillance. 
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figs/flow1.png}
+        \caption{Real-time Camera Detections Flow}
+        \label{fig:flow1}
+    \end{subfigure}
+    \hfill % spacing
+    \begin{subfigure}[b]{0.45\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{figs/flow2.png}
+        \caption{Upload/Download Video Flow}
+        \label{fig:flow2}
+    \end{subfigure}
+    \caption{Basic Client-Server Interaction Flows}
+    \label{fig:flows}
+\end{figure}
+
+The \ref{fig:flow1} flow begins with the client logging into the system, establishing a secure session 
+through user authentication. Following successful login, the client requests an authentication token, which the 
+server generates and sends back. This token is crucial for validating the subsequent requests by the client under 
+the secure session.
+
+Once authenticated, the client requests access to the cameras associated with their account. The server responds by 
+retrieving and sending a list of available cameras. The user selects a camera from this list, and the client sends a 
+request to access the selected camera. The server, upon receiving this request, starts streaming video from the chosen 
+camera directly to the client.
+
+During the streaming, if the server's analysis algorithms detect a weapon in the video, it triggers an alert. 
+This alert is then sent to the client, notifying them of the potential threat.
+
+The second flow, \ref{fig:flow2}, also starts with the client logging in and obtaining an authentication token, ensuring a 
+secure environment for data exchange. After login, the client uploads a video file for analysis, using a POST 
+request. This video is selected from the user's local device and is sent to the server.
+
+Upon receiving the video, the server initiates the analysis using a pre-trained object detection algorithm. 
+
+After completing the analysis, the server generates a new version of the video, which is the output 
+of the model, featuring bounding boxes around the detected objects. This annotated video is then made 
+available for the client to download.
+
+\subsection{Data Models}
 
 In Django, models play a crucial role by serving as the structural foundation of the database. 
 These models, represented in image \ref{fig:db-schema}, enable the seamless translation of database schemas into Django objects, facilitating CRUD 
@@ -466,7 +450,7 @@ video uploaded. It tracks whether each video has been analyzed, helping in the w
 The Uploaded Video Detection model focus on detections within the uploaded videos. 
 It records similar details as the Detection model, such as the type of weapon detected, the confidence level of 
 the detection, and the specific frame and time within the video where the detection occurred.
-\subsection{Views}
+\subsection{API Endpoints}
 Views are a crucial component that handle the logic and control flow of applications by responding to requests from users.
 Views interact with models and render appropriate responses, usually in the form of HTML pages, JSON, or XML, depending 
 on the application's requirements.
@@ -495,8 +479,6 @@ On the other hand, the GET method allows the application to retrieve all detecti
 with a specific user. This endpoint is particularly helpful for creating a historical overview of detections,
 which users can access to review and analyze past incidents.
 
-Additionally, the application includes a DELETE endpoint, for the 
-removal of detections associated with a particular video. This feature enables the management of stored detection data. 
 \begin{figure}[h]
     \centering 
     \includegraphics[width=0.95\textwidth]{figs/views-detections.png} 
@@ -504,6 +486,8 @@ removal of detections associated with a particular video. This feature enables t
     \label{fig:views-detections}
 \end{figure}
 
+Additionally, the application includes a DELETE endpoint, for the 
+removal of detections associated with a particular video. This feature enables the management of stored detection data. 
 
 The uploaded videos section of the application addresses the need to analyze previously recorded or 
 externally sourced video footage. Users can upload videos through the upload video endpoint, which processes and 
@@ -521,7 +505,7 @@ application, facilitating monitoring and alerting. These metrics cover a range o
 response times, and error rates. This feature will be discussed in more detail in the subsequent sections.
 
 
-\subsection{Consumers}
+\subsection{Django Consumers}
 This section discusses the three distinct types of consumers used in the 
 application: \textit{VideoStreamConsumer}, \textit{MultiCameraStreamConsumer}, and \textit{UploadedVideoStreamConsumer}.
 
@@ -565,7 +549,7 @@ Similar to the other consumers, it streams and analyzes the uploaded video concu
 important for post-event analysis.
 
 \subsection{Database Integration}
-MySQL provides a robust, reliable, and efficient storage solution that supports the high demands of 
+MySQL \cite{rfc58} provides a robust, reliable, and efficient storage solution that supports the high demands of 
 real-time data processing and retrieval.
 
 The integration of MySQL within the application infrastructure is facilitated through its deployment inside a 
@@ -586,111 +570,11 @@ locations, frame details, and metadata extracted from surveillance footage. Give
 it aligns well with the tabular format inherent to SQL databases. Utilizing MySQL enables efficient storage, querying, 
 and manipulation of this data, thereby enhancing the overall performance of the detection system.
 
-\section{\ac{yolo} Model for Video Analysis}
-\subsection{\ac{yolo}v5 Model Overview}
-\begin{figure}[h]
-    \centering 
-    \includegraphics[width=0.65\textwidth]{figs/yolov5-architecture2.png} 
-    \caption{YOLOv5 Architecture}
-    \label{fig:yolov5-architecture}
-\end{figure}
-The \ac{yolo}v5 architecture, as depicted in the diagram \ref{fig:yolov5-architecture}, is organized into 
-three primary sections: the Backbone, the Neck, and the Head.
-
-The backbone of the network, CSPDarknet, is essential for the initial processing and feature extraction from input data.
-It employs multiple "BottleNeckCSP" blocks, which are crucial to the Cross Stage Partial Network (CSPNet). 
-
-CSPNet is designed to address a common issue in large-scale neural networks - the redundancy of gradient information. 
-Gradients are essential for adjusting the network during training, providing the necessary information to update 
-the network's parameters, however, when redundant, they can significantly slow the process.
-
-CSPNet, represented on the diagram \ref{fig:cspnet}, addresses this issue by splitting the feature map of layers 
-into parts at various stages within the network.
-This split-and-merge strategy reduces the redundancy of gradient flow through the network, leading to more efficient 
-learning processes. As a result, networks utilizing CSPNet can achieve faster training times and require fewer 
-computational resources.
-
-\begin{figure}[h]
-    \centering 
-    \includegraphics[width=0.75\textwidth]{figs/spnet.png} 
-    \caption{CSPNet - Cross Stage Partial Network}
-    \label{fig:cspnet}
-\end{figure}
-
-Feature extraction in this context involves using convolutional, pooling, and bottleneck layers to 
-transform the raw input image into a set of feature maps. These maps encode essential visual information 
-such as edges, textures, and other significant patterns that are pertinent for detecting objects.
-
-Following the backbone, the Neck of the \ac{yolo}v5 architecture features the Path Aggregation Network (PANet). PANet 
-enhances the feature pyramid network (FPN) with a strong bottom-up pathway, which improves the propagation and 
-utilization of lower-level features across the network. This structure helps in better localization and detection 
-accuracy, particularly for varied object sizes.
-
-An FPN is crucial for constructing a pyramid of feature maps at multiple scales, allowing the network to detect 
-objects effectively across different sizes. It does this by integrating semantic information from deep, coarse 
-resolution feature maps with finer-resolution features from earlier layers through lateral connections and top-down 
-pathways. This combination ensures that both high-level and low-level features contribute to the final detections.
-
-\begin{figure}[h]
-    \centering 
-    \includegraphics[width=0.7\textwidth]{figs/fpn.png} 
-    \caption{Feature Pyramid Network}
-    \label{fig:fpn}
-\end{figure}
-
-The final section is the \ac{yolo} Layer, which forms the detection head of the network. This layer processes the 
-enriched feature maps to predict bounding boxes, object classes, and confidence scores.
-
-\ac{yolo}v5 was chosen for its balance of speed and accuracy, building on the strengths of previous \ac{yolo} versions to 
-enhance detection performance.  Its stability and maturity have been proven through extensive real-world testing 
-and a strong support ecosystem, making it a reliable choice. 
-
-While newer versions may offer specific improvements, they do not have the same level of reliability and 
-resource availability as \ac{yolo}v5, making it the preferred option for reliable and efficient object detection tasks.
-A good point to consider for the future is to evaluate the integration and use of a newer version. Testing it and 
-applying it in the application could bring better results.
-
-\subsection{Dataset} 
-In the training and testing of the object detection model, a variety of image data from three distinct datasets was 
-prepared and utilized. These datasets were selected to encompass a broad spectrum of scenarios, focusing on weapon 
-detection.
-
-\begin{itemize}
-    \item DaSCI Dataset: includes images of exposed weapons, specifically knives and handguns, along with various 
-    random objects. Originally containing six different classes, it was restructured to include only two categories: 
-    'knife' and 'weapons';
-    \item Mock Attack Dataset: images captured from three strategically positioned surveillance cameras in corridors 
-    and an entrance, this dataset offers multiple viewing angles of scenarios where individuals are wielding weapons. 
-    The images were annotated at a rate of two frames per second;
-    \item Action Recognition and Object Detection Dataset: several videos categorized into three types: no guns, handguns, 
-    and machine guns, this dataset required significant modifications. The annotations were initially in JSON 
-    format and had to be converted into .txt format compatible with \ac{yolo}v5. Additionally, video frames were extracted 
-    to form a static image dataset suitable for the training process.
-\end{itemize}
-
-To ensure the model's effectiveness across various visual representations, the initial dataset of 11020 images was 
-subjected to augmentation. The augmentation process involved two phases. In the first phase, images were 
-randomly blurred and rotated to introduce variability. In the subsequent phase, these once-augmented images underwent 
-brightness adjustments, resulting in sets of images that were either darker or lighter.
-
-The augmented dataset comprised 22977 images, being the distribution set at 80\% for training and 20\% for testing. 
-This allocation ensures that a substantial amount of data is available for the model to learn from, while 
-still reserving a significant portion for evaluating the model's performance.
-
-All this process is represented in diagram \ref{fig:dataset-mq}.
-
-\begin{figure}[h]
-    \centering 
-    \includegraphics[width=0.9\textwidth]{figs/dataset-creation2.png} 
-    \caption{Dataset Creation Steps}
-    \label{fig:dataset-mq}
-\end{figure}
-
-\subsection{Integration into Django}
+\subsection{\ac{yolo} Model Integration}
 The integration of the pretrained \ac{yolo} model into the backend for video analysis involved several key steps:
 
 \begin{itemize}
-    \item Model Pretraining: the \ac{yolo} model is first pretrained on the custom dataset to detect objects, 
+    \item Model Pre-training: the \ac{yolo} model is first pretrained on the custom dataset to detect objects, 
     as detailed in the section below;
     \item Environment Setup: the necessary packages and dependencies are installed;
     \item Model Integration: pretrained \ac{yolo} model's weight file was incorporated into the Django app;
@@ -700,7 +584,10 @@ The integration of the pretrained \ac{yolo} model into the backend for video ana
 
 \section{Web Server Configuration}
 \subsection{Nginx Setup and Load Balancing}
-Nginx functions as a high-performance web server and reverse proxy server within the system, efficiently managing 
+Load balancing is crucial for maintaining 
+optimal performance, especially under high traffic conditions, as it ensures consistent response times and maximizes 
+resource utilization.
+Nginx \cite{rfc57} functions as a high-performance web server and reverse proxy server within the system, efficiently managing 
 incoming HTTP and WebSocket requests. It enhances the system's reliability and scalability by distributing client 
 requests to various backend services. This setup ensures load balancing and efficient resource utilization.
 
@@ -709,9 +596,7 @@ configuration file (nginx.conf).
 
 Load balancing consists of distributing network or application traffic across multiple servers to ensure no single 
 server becomes overwhelmed. This technique enhances the availability and reliability of applications by preventing 
-server overloads and ensuring that client requests are efficiently managed. Load balancing is crucial for maintaining 
-optimal performance, especially under high traffic conditions, as it ensures consistent response times and maximizes 
-resource utilization.
+server overloads and ensuring that client requests are efficiently managed.
 
 Nginx employs load balancing through defined upstream server pools. The \textit{upstream} directive specifies a group of 
 backend servers to distribute requests. Two upstream pools are configured: \textit{backend\_api} for API requests 
@@ -761,7 +646,7 @@ headers for WebSocket connections.
 
 \section{Monitoring and Visualization}
 \subsection{Metrics Collection with Prometheus}
-Prometheus is an open-source systems monitoring and alerting toolkit designed primarily for reliability and scalability.
+Prometheus \cite{rfc56} is an open-source systems monitoring and alerting toolkit designed primarily for reliability and scalability.
 It works by scraping metrics from applications, storing this data in a time-series database, and allowing 
 powerful queries and visualizations through its flexible query language.
 
@@ -774,7 +659,7 @@ on port 9090.
 
 
 \subsection{Visualization using Grafana}
-Grafana is an open-source analytics and interactive visualization web application. It is highly extensible and 
+Grafana \cite{rfc55} is an open-source analytics and interactive visualization web application. It is highly extensible and 
 provides tools to build dashboards for visualizing data from various sources, including Prometheus. Grafana supports 
 a wide range of chart types and is used to create real-time, dynamic dashboards that help monitor and analyze system 
 performance.
@@ -785,16 +670,16 @@ time-series database, and presents the data in an accessible, visual format.
 Grafana was deployed using Docker and configured to run on port 3001, depending on Prometheus being available 
 to function correctly.
 
+A dashboard was created featuring several metrics, as represented in figure \ref{fig:grafana-dashboard}. This allows for 
+a comprehensive understanding of the application's behavior, facilitating detailed performance analysis and issue 
+detection.
+
 \begin{figure}[h]
     \centering 
-    \includegraphics[width=\textwidth]{figs/grafana-dashboard.png} 
+    \includegraphics[width=0.98\textwidth]{figs/grafana-dashboard.png} 
     \caption{Grafana Dashboard}
     \label{fig:grafana-dashboard}
 \end{figure}
-
-A dashboard was created featuring several metrics, as represented in Image \ref{fig:grafana-dashboard}. This allows for 
-a comprehensive understanding of the application's behavior, facilitating detailed performance analysis and issue 
-detection.
 
 \section{Implementation Challenges}
 Implementing real-time weapon analysis for surveillance systems presents a series of significant challenges, 

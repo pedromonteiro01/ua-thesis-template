@@ -1,0 +1,53 @@
+\section{Sources and Origins of the Dataset}
+Constructing a dataset that covers all possible scenarios presents a significant challenge. However, it is feasible to create a comprehensive dataset by including images that represent factors that complicate detection, such as low lighting conditions and poor image resolution. 
+
+The comprehensive exploration and analysis of various online datasets, like COCO \cite{rfc16} and CAVIAR \cite{rfc30}, played a key role in the development of an advanced and realistic dataset, aiming to mirror real-life scenarios, thereby enhancing its applicability in practical contexts. To this end, the dataset integrates images derived from a mock attack scenario \cite{rfc45}, simulating real-world environments like corridors and an entrance area in a university setting. These images, captured from three surveillance cameras, showcase individuals wielding weapons and other scenarios. 
+
+\begin{figure}[h]
+    \centering
+
+    % Image 1
+    \begin{minipage}{0.47\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/cam1.jpg} % Include the image
+        \caption{Mock Attack Dataset\cite{rfc45} Cam 1 frame}
+        \label{fig:cam1}
+    \end{minipage}
+    \hfill
+    % Image 2
+    \begin{minipage}{0.47\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figs/cam5.jpg} % Include the image
+        \caption{Mock Attack Dataset\cite{rfc45} Cam 5 frame}
+        \label{fig:cam5}
+    \end{minipage}
+
+\end{figure}
+
+The cameras, strategically placed in two different corridors and one entrance, provide a variety of angles and positions, resulting in a rich and diverse visual dataset. Camera 1, in a corridor, recorded 607 frames amidst uniform lighting and obstructions like doors, Figure \ref{fig:cam1}. Camera 7, also in a corridor, gathered 3511 frames, with more complex environments including fire extinguishers. Camera 5, at the entrance, Figure \ref{fig:cam5}, added 1031 frames, distinguished by irregular lighting and obstacles like a black carpet. Annotated at 2 frames per second, these images from different perspectives provide a diverse and realistic depiction of the simulated scenarios.
+
+Additionally, the dataset incorporates a selection of more general images of exposed weapons from the DaSCI collection \cite{rfc29}. This inclusion broadens the scope of the dataset, providing a more comprehensive view of weapon imagery. It also includes images that diverge from the theme of weapons and knives, featuring everyday objects such as wallets or bicycles.
+
+In the process of creating this dataset, it was necessary to convert annotations from .xml files to .txt format to ensure compatibility with the YOLOv5 format.
+
+In total, the dataset comprises 11020 images. A strategic division of these images allocates 80\% for training purposes. This portion is crucial for the development and refinement of the object detection model, allowing for extensive learning and adaptation based on a wide array of visual inputs. The remaining 20\% of the images are used for testing. 
+
+Table \ref{datasets-table} presents a dataset summary, listing the source, number of images, resolution, format, and a brief description.
+\begin{table}[ht]
+    \centering
+    \begin{tabularx}{\textwidth}{|l|l|l|l|X|}
+    \hline
+    \textbf{Source} & \textbf{Images} & \textbf{Resolution} & \textbf{Format} & \textbf{Description} \\ \hline
+    \multirow{2}{*}{DaSCI \cite{rfc29}} & 5371 & * & .jpg & Variety of weapons displayed in different positions \\ \cline{2-5}
+        & 500 & * & .jpg & Random everyday objects \\ \hline
+
+    \multirow{3}{*}{\centering Mock Attack Dataset \cite{rfc45}} & 607 & 1920x1080 & .png & 
+    Cam1: located in one of two corridors, with uniform lighting and some conflicting objects such as doors or bins. \\ \cline{2-5}
+     & 3511 & 1920x1080 & .png & 
+    Cam5: at the entrance of a university module, features objects like a black carpet on the floor, with irregular lighting. \\ \cline{2-5}
+     & 1031 & 1920x1080 & .png & 
+    Cam7: in the other corridor, similar to Cam1 but with more conflicting objects. \\ \hline
+    \end{tabularx}
+    \caption{Summary of Image Datasets and Their Characteristics}
+    \label{datasets-table}
+\end{table}
