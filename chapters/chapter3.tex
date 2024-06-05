@@ -12,35 +12,55 @@
 \end{design}
 
 \section{Basic Use Cases}
-The diagram \ref{fig:use-cases} outlines the primary use cases of the application, structured around the user 
+The diagram \ref{fig:use-cases} outlines the main use cases of the application, structured around the user 
 interaction flow.
 
 \begin{figure}[h]
     \centering 
-    \includegraphics[width=0.6\textwidth]{figs/use-cases3.png} 
+    \includegraphics[width=0.7\textwidth]{figs/use-cases4.png} 
     \caption{System Basic Use Cases}
     \label{fig:use-cases}
 \end{figure}
 
-At the initial stage, users are presented with a list of all cameras that are registered under their account. 
+The main actor of the system is the police officer, who is responsible for monitoring and managing the system's 
+surveillance capabilities
 
-This list not only displays each camera but also includes information such as the camera's location and current operational
-status. Users can conveniently view real-time video streams from these cameras through the application's interface.
+Users have the ability to view live camera feeds, which provides real-time surveillance. The system must ensure that 
+all cameras are operational and accessible. Users can select specific cameras to focus on, allowing for detailed 
+monitoring of particular areas.
 
-Upon viewing the list, users can select any camera to access a more detailed monitoring view. This action 
-redirects to a specific page where the video feed from the chosen camera is displayed. This page works 
-as the hub for real-time video analysis. While monitoring the video feed, the application actively scans the stream 
-for the presence of weapons. If the detection model identifies a weapon within the video, the system generates an alert.
+The upload video functionality allows a user to upload video content to the system. Once a video is uploaded, the 
+system automatically processes it to detect any weapons shown in the images. The 
+user must be authenticated and authorized to upload videos. After the video is processed, the 
+results are stored in the system's database.
 
-In addition the application supports the upload of pre-recorded videos. Users can upload video files to the platform, which 
-are then analyzed by the same detection algorithms used for live streaming.
+After videos have been processed, users can download these videos. This function is essential for users who need to 
+keep offline records or further analyze video content. The system handles the retrieval and download of these videos, 
+ensuring that users can access them conveniently and securely.
 
-After uploading a video for analysis, the system processes and annotates the footage with bounding boxes to 
-highlight detected weapons. Once the analysis is complete, users have the option to download the annotated video.
+Check detection history use case allows users to review and audit the detection activities that have occurred. 
+Users with the appropriate permissions can access detailed 
+logs that document the specifics of detected threats, and when they were detected, providing a 
+comprehensive audit trail.
+%At the initial stage, users are presented with a list of all cameras that are registered under their account. 
 
-Users can also access a comprehensive log of all detection events. This historical data includes detailed information 
-about each detection instance, such as the date, time, and frame, enabling users to review past incidents and 
-analyze detection patterns over time.
+%This list not only displays each camera but also includes information such as the camera's location and current operational
+%status. Users can conveniently view real-time video streams from these cameras through the application's interface.
+
+%Upon viewing the list, users can select any camera to access a more detailed monitoring view. This action 
+%redirects to a specific page where the video feed from the chosen camera is displayed. This page works 
+%as the hub for real-time video analysis. While monitoring the video feed, the application actively scans the stream 
+%for the presence of weapons. If the detection model identifies a weapon within the video, the system generates an alert.
+
+%In addition the application supports the upload of pre-recorded videos. Users can upload video files to the platform, which 
+%are then analyzed by the same detection algorithms used for live streaming.
+
+%After uploading a video for analysis, the system processes and annotates the footage with bounding boxes to 
+%highlight detected weapons. Once the analysis is complete, users have the option to download the annotated video.
+
+%Users can also access a comprehensive log of all detection events. This historical data includes detailed information 
+%about each detection instance, such as the date, time, and frame, enabling users to review past incidents and 
+%analyze detection patterns over time.
 
 \section{Functional Requirements}
 The main goal is to design and implement a real-time weapon detection system capable of 
@@ -59,37 +79,26 @@ These critical insights guided the development of the core functionalities outli
     \end{itemize}
     \item Detection and Alert Mechanism
     \begin{itemize}
-    \item The system shall employ an advanced image recognition algorithm to detect weapons with at least 95\% accuracy;
     \item The system shall generate real-time alerts upon detecting a weapon;
     \item The system shall classify and log each detection event, including time, location, and type of weapon detected;
     \end{itemize}
-    \item User Interface
+    \item Video Upload for Detection
     \begin{itemize}
-    \item The system shall offer a user-friendly interface with a dashboard displaying all active video streams;
-    \item The interface shall allow operators to navigate easily between different video feeds and alert logs;
-    \item The interface shall provide real-time notifications and display detailed information about each detection event;
+        \item The system shall allow users to upload pre-recorded video files (.mp4) for weapon detection analysis;
     \end{itemize}
-    \item Data Management
+    \item Easy Navigation
+    \begin{itemize}
+        \item The interface shall allow users to navigate easily between different video feeds and alert logs;
+    \end{itemize}
+    \item User-Friendly Interface
+    \begin{itemize}
+        \item The system shall offer a user-friendly interface with a dashboard displaying all active video streams;
+    \end{itemize}
+    \item Detection History
     \begin{itemize}
     \item The system shall store video footage and detection logs securely;
     \item The system shall allow authorized personnel to access and retrieve stored video footage and 
     logs for review and analysis;
-    \end{itemize}
-    \item Access Control and Security
-    \begin{itemize}
-    \item The system shall implement user authentication mechanisms to verify the identity of users;
-    \end{itemize}
-    \item Reliability and Availability
-    \begin{itemize}
-    \item The system shall include failover protocols to switch to backup systems in case of hardware or software failures;
-    \item The system shall monitor its own health and alert administrators to potential issues or failures;
-    \end{itemize}
-    \item Performance Monitoring
-    \begin{itemize}
-    \item The system shall continuously monitor its performance, including latency and throughput metrics;
-    \item The system shall log performance data and provide administrators with tools to analyze and 
-    optimize system performance;
-    \item The system shall generate reports on detection accuracy and system performance for regular review.
     \end{itemize}
     \end{enumerate}
 
@@ -141,7 +150,7 @@ The non-functional requirements can be categorized as follows:
 \begin{enumerate}
     \item Performance
     \begin{itemize}
-        \item Latency: the system must process video frames with minimal delay to ensure real-time detection;
+        \item Latency: the system must process video frames with minimal delay;
         \item Throughput: the system should handle multiple video streams simultaneously without significant 
         performance degradation;
         \item Accuracy: high detection accuracy is essential to minimize false positives and false negatives;
@@ -155,7 +164,7 @@ The non-functional requirements can be categorized as follows:
     \end{itemize}
     \item Security
     \begin{itemize}
-        \item Data Protection: the system must ensure the confidentiality and integrity of video footage. This includes 
+        \item Data Protection: the system must include
         secure data transmission and storage using encryption methods to prevent unauthorized access;
         \item Access Control: strict access control mechanisms should be implemented to restrict system usage to 
         authorized personnel only;
@@ -163,15 +172,20 @@ The non-functional requirements can be categorized as follows:
     \item Usability
     \begin{itemize}
         \item User Interface: the system must provide an intuitive and user-friendly interface for 
-        operators. This
-        includes clear visual indicators for detected threats and straightforward navigation to view 
-        video feeds and alerts.
+        operators, including visual indicators for detected threats and straightforward navigation between 
+        video feeds;
     \end{itemize}
+    \item Performance Monitoring
+        \begin{itemize}
+        \item The system shall continuously monitor its performance, including latency and throughput metrics,
+        and provide administrators with tools to analyze and optimize system performance;
+        \item The system shall generate reports on detection accuracy and system performance for regular review.
+        \end{itemize}
   \end{enumerate}
 
-  \begin{figure}[ht]
-    \centering 
-    \includegraphics[width=0.65\textwidth]{figs/requirements.png} 
-    \caption{Non-Functional Requirements}
-    \label{fig:non-requirements}
-\end{figure}
+  %\begin{figure}[ht]
+  %  \centering 
+  %  \includegraphics[width=0.65\textwidth]{figs/requirements.png} 
+  %  \caption{Non-Functional Requirements}
+  %  \label{fig:non-requirements}
+%\end{figure}

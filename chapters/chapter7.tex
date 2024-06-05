@@ -93,14 +93,15 @@ enhances the feature pyramid network (FPN) with a strong bottom-up pathway, whic
 utilization of lower-level features across the network. This structure helps in better localization and detection 
 accuracy, particularly for varied object sizes.
 
-An FPN is crucial for constructing a pyramid of feature maps at multiple scales, allowing the network to detect 
+FPN, exemplified in figure \ref{fig:fpn}, is crucial for constructing a pyramid of feature maps at multiple scales, 
+allowing the network to detect 
 objects effectively across different sizes. It does this by integrating semantic information from deep, coarse 
 resolution feature maps with finer-resolution features from earlier layers through lateral connections and top-down 
 pathways. This combination ensures that both high-level and low-level features contribute to the final detections.
 
 \begin{figure}[h]
     \centering 
-    \includegraphics[width=0.6\textwidth]{figs/fpn.png} 
+    \includegraphics[width=0.55\textwidth]{figs/fpn.png} 
     \caption{Feature Pyramid Network}
     \label{fig:fpn}
 \end{figure}
@@ -134,11 +135,11 @@ The datasets discovered that fullfill these parameters are:
     to form a static image dataset suitable for the training process.
 \end{itemize}
 
-Next, we performed the train and test. Figure \ref{fig:dataset-mq} describe the pipeline or trainning  and testing the selected dataset. 
+Next, we performed the train and test. Figure \ref{fig:dataset-mq} describe the pipeline for trainning  and testing the selected dataset. 
 
 \begin{figure}[h]
     \centering 
-    \includegraphics[width=0.75\textwidth]{figs/dataset-creation3.png} 
+    \includegraphics[width=0.8\textwidth]{figs/dataset-creation3.png} 
     \caption{Dataset Creation Steps}
     \label{fig:dataset-mq}
 \end{figure}
@@ -148,5 +149,6 @@ First, the dataset is submited into data augmentation task divided into two subt
 randomly blurred and rotated to produce some variability; in a second task, images underwent brightness adjustments,
 resulting in sets of images that were either darker or lighter \footnote{\url{https://github.com/pedromonteiro01/yolo-utils/blob/main/augment.py}}.
 
-The dataset resulted has a total of 22977 images. These images were divided into 
+The dataset resulted has a total of 22977 images, containing more images of handguns than knives. 
+These images were divided into 
 80\% to train, and 20\% to test. The model generation were submited to a fine tunning to achieve the best metrics results.

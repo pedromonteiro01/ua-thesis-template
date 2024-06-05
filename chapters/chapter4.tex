@@ -654,7 +654,7 @@ It collects metrics data through a "scraping" process. This involves periodicall
 the application that exposes metrics, \textit{/metrics/}. The application has been instrumented with 
 django\_prometheus to provide these metrics.
 
-Prometheus is launched using Docker and configured via a YAML file \textit{prometheus.yml}, exposing Prometheus 
+Prometheus is launched using Docker and configured via \textit{prometheus.yml} file, exposing Prometheus 
 on port 9090.
 
 
@@ -670,13 +670,13 @@ time-series database, and presents the data in an accessible, visual format.
 Grafana was deployed using Docker and configured to run on port 3001, depending on Prometheus being available 
 to function correctly.
 
-A dashboard was created featuring several metrics, as represented in figure \ref{fig:grafana-dashboard}. This allows for 
+A dashboard was created featuring several metrics, as exemplified in figure \ref{fig:grafana-dashboard}. This allows for 
 a comprehensive understanding of the application's behavior, facilitating detailed performance analysis and issue 
 detection.
 
 \begin{figure}[h]
     \centering 
-    \includegraphics[width=0.98\textwidth]{figs/grafana-dashboard.png} 
+    \includegraphics[width=\textwidth]{figs/grafana-dashboard2.png} 
     \caption{Grafana Dashboard}
     \label{fig:grafana-dashboard}
 \end{figure}
